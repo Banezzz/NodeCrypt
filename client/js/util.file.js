@@ -391,7 +391,7 @@ async function decompressArchiveToFiles(volumes, fileManifest, archiveHash = nul
 						// Extract files from archive
 				let dataOffset = 0;
 				const extractedFiles = [];
-						for (const fileInfo of fileManifest) {
+						for (let i = 0; i < fileManifest.length; i++) {
 					// Read file metadata: [name_length(4)][name][size(8)][data]
 					const nameLengthBytes = decompressed.slice(dataOffset, dataOffset + 4);
 					const nameLengthView = new DataView(nameLengthBytes.buffer);
@@ -440,9 +440,9 @@ async function decompressArchiveToFiles(volumes, fileManifest, archiveHash = nul
 // Setup file sending functionality
 // 设置文件发送功能
 export function setupFileSend({
-	inputSelector,
+	_inputSelector,
 	attachBtnSelector,
-	fileInputSelector,
+	_fileInputSelector,
 	onSend
 }) {
 	const attachBtn = document.querySelector(attachBtnSelector);
@@ -476,15 +476,13 @@ async function handleFilesUpload(files, onSend) {
 	const fileId = generateFileId();
 	
 	try {
-		// Show compression progress
-		let progressElement = null;
-		
-		function showProgress(message) {
-			// 删除系统提示
+		// Progress tracking (stubs for future use)
+		function showProgress(_message) {
+			// Reserved for progress display
 		}
-		
-		function updateProgress(message) {
-			// 删除系统提示
+
+		function updateProgress(_message) {
+			// Reserved for progress updates
 		}
 		
 		if (files.length === 1) {
@@ -529,7 +527,6 @@ async function handleFilesUpload(files, onSend) {
 			
 		} else {
 			// Multiple files upload - create archive
-			const totalSize = files.reduce((sum, file) => sum + file.size, 0);
 			showProgress();
 			
 			const { volumes, originalSize, compressedSize, archiveHash, fileCount, fileManifest } = await compressFilesToArchive(files);
@@ -723,7 +720,7 @@ function updateFileProgress(fileId) {
 // Handle incoming file messages
 // 处理接收到的文件消息
 export function handleFileMessage(message, isPrivate = false, roomIndex = -1) {
-	const { type, fileId, userName } = message;
+	const { type } = message;
 
 	switch (type) {
 		case 'file_start':

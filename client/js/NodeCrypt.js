@@ -200,7 +200,7 @@ class NodeCrypt {
 					return
 				}
 			}
-		} catch (e) {}
+		} catch { /* ignore JSON parse errors */ }
 		if (!this.serverShared) {
 			const parts = event.data.split('|');
 			if (!parts[0] || !parts[1]) {

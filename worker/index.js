@@ -1,7 +1,7 @@
 import { generateClientId, encryptMessage, decryptMessage, logEvent, isString, isObject, getTime } from './utils.js';
 
 export default {
-  async fetch(request, env, ctx) {
+  async fetch(request, env, _ctx) {
     const url = new URL(request.url);
 
     // 处理WebSocket请求
@@ -23,7 +23,7 @@ export default {
   }
 };
 
-export class ChatRoom {  constructor(state, env) {
+export class ChatRoom {  constructor(state, _env) {
     this.state = state;
     
     // Use objects like original server.js instead of Maps

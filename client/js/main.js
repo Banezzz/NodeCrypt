@@ -84,7 +84,6 @@ import {	renderUserList,       // 渲染用户列表 / Render user list
 	openLoginModal,       // 打开登录窗口 / Open login modal
 	setupTabs,            // 设置页面标签切换 / Setup tab switching
 	autofillRoomPwd,      // 自动填充房间密码 / Autofill room password
-	generateLoginForm,    // 生成登录表单HTML / Generate login form HTML
 	initLoginForm,        // 初始化登录表单 / Initialize login form
 	initFlipCard          // 初始化翻转卡片功能 / Initialize flip card functionality
 } from './ui.js';
@@ -377,7 +376,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Listen for language change events
 // 监听语言切换事件
-window.addEventListener('languageChange', (event) => {
+window.addEventListener('languageChange', (_event) => {
 	updateStaticTexts();
 });
 
@@ -409,7 +408,7 @@ document.addEventListener('dragenter', (e) => {
 	}
 });
 
-document.addEventListener('dragleave', (e) => {
+document.addEventListener('dragleave', () => {
 	dragCounter--;
 	if (dragCounter === 0) {
 		hasTriggeredAttach = false;
@@ -420,7 +419,7 @@ document.addEventListener('dragover', (e) => {
 	e.preventDefault();
 });
 
-document.addEventListener('drop', (e) => {
+document.addEventListener('drop', (_e) => {
 	e.preventDefault();
 	dragCounter = 0;
 	hasTriggeredAttach = false;

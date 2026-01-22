@@ -3,7 +3,6 @@
 
 import {
 	$,
-	$id,
 	createElement,
 	on,
 	addClass,
@@ -16,7 +15,6 @@ import { t } from './util.i18n.js';
 // 文件上传模态框状态
 let uploadModal = null;
 let selectedFiles = new Map();
-let fileIdCounter = 0;
 let onSendCallback = null;
 
 // Listen for language changes to update modal text

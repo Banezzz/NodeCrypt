@@ -360,11 +360,11 @@ export function setupMoreBtnMenu() {
 		}
 	});
 
-	menu.addEventListener('animationend', function(e) {
+	menu.addEventListener('animationend', function(_e) {
 		animating = false;
 	});
 
-	menu.addEventListener('transitionend', function(e) {
+	menu.addEventListener('transitionend', function(_e) {
 		animating = false;
 	});
 }
@@ -378,7 +378,7 @@ export function preventSpaceInput(input) {
 			e.preventDefault()
 		}
 	});
-	input.addEventListener('input', function(e) {
+	input.addEventListener('input', function(_e) {
 		input.value = input.value.replace(/[\s\p{P}\p{S}]/gu, function(match) {
 			return match === "'" ? "'" : ''
 		})
