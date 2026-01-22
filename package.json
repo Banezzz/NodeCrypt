@@ -1,14 +1,22 @@
 {
   "name": "nodecrypt",
   "version": "1.0.0",
+  "type": "module",
   "description": "端到端加密节点",
   "main": "worker/index.js",
   "scripts": {
     "build": "vite build",
-    "dev": " wrangler dev",
-    "deploy": " wrangler deploy",
-    "publish": " wrangler publish",
-    "build:docker": "vite build"
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "publish": "wrangler publish",
+    "build:docker": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "lint": "eslint client/js worker --ext .js",
+    "lint:fix": "eslint client/js worker --ext .js --fix",
+    "format": "prettier --write \"client/**/*.{js,css,html}\" \"worker/**/*.js\" \"*.json\"",
+    "format:check": "prettier --check \"client/**/*.{js,css,html}\" \"worker/**/*.js\" \"*.json\""
   },
   "repository": {
     "type": "git",
@@ -22,10 +30,16 @@
   },
   "homepage": "https://github.com/shuaiplus/NodeCrypt#readme",
   "devDependencies": {
+    "@vitest/coverage-v8": "^2.1.0",
     "autoprefixer": "^10.4.21",
     "cssnano": "^7.0.7",
+    "eslint": "^9.0.0",
+    "eslint-plugin-security": "^3.0.0",
+    "happy-dom": "^15.0.0",
+    "prettier": "^3.3.0",
     "terser": "^5.39.2",
     "vite": "^6.3.5",
+    "vitest": "^2.1.0",
     "wrangler": "^4.16.1"
   },
   "dependencies": {

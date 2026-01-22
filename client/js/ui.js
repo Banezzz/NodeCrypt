@@ -25,36 +25,13 @@ import {
 import {
 	updateChatInputStyle
 } from './chat.js';
+import {
+	encryptShareData,
+	decryptShareUrl
+} from './util.crypto.js';
 
 // Utility functions for security and error handling
 // 安全和错误处理工具函数
-
-// Simple encryption/decryption using base64 and character shifting
-// 使用base64和字符偏移的简单加密/解密
-function simpleEncrypt(text) {
-	if (!text) return '';
-	// Convert to base64 and shift characters
-	const base64 = btoa(unescape(encodeURIComponent(text)));
-	return base64.split('').map(char => {
-		const code = char.charCodeAt(0);
-		return String.fromCharCode(code + 3);
-	}).join('');
-}
-
-function simpleDecrypt(encrypted) {
-	if (!encrypted) return '';
-	try {
-		// Reverse character shifting and decode base64
-		const shifted = encrypted.split('').map(char => {
-			const code = char.charCodeAt(0);
-			return String.fromCharCode(code - 3);
-		}).join('');
-		return decodeURIComponent(escape(atob(shifted)));
-	} catch (error) {
-		console.warn('Failed to decrypt data:', error);
-		return '';
-	}
-}
 
 // Validate room data
 // 验证房间数据
@@ -101,11 +78,11 @@ function showFallbackCopy(text, prefix) {
 
 // Execute menu action with error handling
 // 执行菜单操作并处理错误
-function executeMenuAction(action, closeMenuCallback) {
+async function executeMenuAction(action, closeMenuCallback) {
 	try {
 		switch (action) {
 			case 'share':
-				handleShareAction();
+				await handleShareAction();
 				break;
 			case 'exit':
 				handleExitAction();
@@ -121,9 +98,9 @@ function executeMenuAction(action, closeMenuCallback) {
 	}
 }
 
-// Handle share action
-// 处理分享操作
-function handleShareAction() {
+// Handle share action with AES-GCM encryption
+// 使用AES-GCM加密处理分享操作
+async function handleShareAction() {
 	const validation = validateRoomData(roomsData[activeRoomIndex]);
 	if (!validation.valid) {
 		window.addSystemMsg && window.addSystemMsg(`${t('action.cannot_share', 'Cannot share:')} ${validation.error}`);
@@ -133,18 +110,23 @@ function handleShareAction() {
 	const rd = roomsData[activeRoomIndex];
 	const roomName = rd.roomName.trim();
 	const password = rd.password || '';
-	
-	// Encrypt room name and password
-	const encryptedRoom = simpleEncrypt(roomName);
-	const encryptedPwd = password ? simpleEncrypt(password) : '';
-	
-	// Create share URL with encrypted data
-	let url = `${location.origin}${location.pathname}?r=${encodeURIComponent(encryptedRoom)}`;
-	if (encryptedPwd) {
-		url += `&p=${encodeURIComponent(encryptedPwd)}`;
+
+	try {
+		// Encrypt room name and password with AES-GCM
+		const encryptedRoom = await encryptShareData(roomName);
+		const encryptedPwd = password ? await encryptShareData(password) : '';
+
+		// Create share URL with encrypted data
+		let url = `${location.origin}${location.pathname}?r=${encodeURIComponent(encryptedRoom)}`;
+		if (encryptedPwd) {
+			url += `&p=${encodeURIComponent(encryptedPwd)}`;
+		}
+
+		copyToClipboard(url, t('action.share_copied', 'Share link copied!'), t('action.copy_url_failed', 'Copy failed, url:'));
+	} catch (error) {
+		console.error('Share encryption failed:', error);
+		window.addSystemMsg && window.addSystemMsg(t('action.share_failed', 'Failed to generate share link'));
 	}
-	
-	copyToClipboard(url, t('action.share_copied', 'Share link copied!'), t('action.copy_url_failed', 'Copy failed, url:'));
 }
 
 // Handle exit action
@@ -505,28 +487,32 @@ export function setupTabs() {
 	}
 }
 
-// Autofill room and password from URL
-// 从 URL 自动填充房间和密码
-export function autofillRoomPwd(formPrefix = '') {
+// Autofill room and password from URL with AES-GCM decryption
+// 使用AES-GCM解密从URL自动填充房间和密码
+export async function autofillRoomPwd(formPrefix = '') {
 	const params = new URLSearchParams(window.location.search);
-	
+
 	// Check for new encrypted format first
 	const encryptedRoom = params.get('r');
 	const encryptedPwd = params.get('p');
-	
+
 	// Check for old plaintext format (for backward compatibility)
 	const plaintextRoom = params.get('node');
 	const plaintextPwd = params.get('pwd');
-	
+
 	let roomValue = '';
 	let pwdValue = '';
 	let isPlaintext = false;
-	
+
 	if (encryptedRoom) {
-		// New encrypted format
-		roomValue = simpleDecrypt(decodeURIComponent(encryptedRoom));
-		if (encryptedPwd) {
-			pwdValue = simpleDecrypt(decodeURIComponent(encryptedPwd));
+		// New encrypted format - supports both AES-GCM and legacy Caesar cipher
+		try {
+			roomValue = await decryptShareUrl(decodeURIComponent(encryptedRoom));
+			if (encryptedPwd) {
+				pwdValue = await decryptShareUrl(decodeURIComponent(encryptedPwd));
+			}
+		} catch (error) {
+			console.error('Share link decryption failed:', error);
 		}
 	} else if (plaintextRoom) {
 		// Old plaintext format - show security warning
@@ -535,13 +521,14 @@ export function autofillRoomPwd(formPrefix = '') {
 			pwdValue = decodeURIComponent(plaintextPwd);
 		}
 		isPlaintext = true;
-		
+
 		// Show security warning for plaintext URLs
 		if (window.addSystemMsg) {
 			window.addSystemMsg(t('system.security_warning', '⚠️ This link uses an old format. Room data is not encrypted.'), true);
 		}
 	}
-		// Fill in the form fields
+
+	// Fill in the form fields
 	if (roomValue) {
 		const roomInput = document.getElementById(formPrefix + 'roomName');
 		if (roomInput) {
@@ -549,13 +536,14 @@ export function autofillRoomPwd(formPrefix = '') {
 			roomInput.readOnly = true;
 			roomInput.style.background = isPlaintext ? '#fff9e6' : '#f5f5f5'; // Yellow tint for plaintext
 		}
-				// Always lock password field when coming from a share link
+
+		// Always lock password field when coming from a share link
 		const pwdInput = document.getElementById(formPrefix + 'password');
 		if (pwdInput) {
 			pwdInput.value = pwdValue; // Will be empty string if no password
 			pwdInput.readOnly = true;
 			pwdInput.style.background = isPlaintext ? '#fff9e6' : '#f5f5f5'; // Yellow tint for plaintext
-			
+
 			// Add visual indicator for no password and keep label floating
 			if (!pwdValue) {
 				pwdInput.placeholder = 'No password required';
@@ -566,7 +554,7 @@ export function autofillRoomPwd(formPrefix = '') {
 			}
 		}
 	}
-	
+
 	// Clear URL parameters for security
 	if (roomValue || pwdValue) {
 		window.history.replaceState({}, '', location.pathname);

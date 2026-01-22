@@ -10,6 +10,29 @@ const DEFAULT_VOLUME_SIZE = 256 * 1024; // 512KB
 // 文件传输状态管理
 window.fileTransfers = new Map();
 
+// DOM element cache for file progress updates (reduces querySelectorAll calls)
+// DOM元素缓存用于文件进度更新（减少querySelectorAll调用）
+const fileElementCache = new Map();
+
+// Register a file element in the cache for efficient updates
+// 在缓存中注册文件元素以便高效更新
+export function registerFileElement(fileId, element) {
+	if (!element) return;
+	fileElementCache.set(fileId, {
+		element,
+		progressContainer: element.querySelector('.file-progress-container'),
+		progressBar: element.querySelector('.file-progress'),
+		statusText: element.querySelector('.file-status'),
+		downloadBtn: element.querySelector('.file-download-btn')
+	});
+}
+
+// Remove a file element from the cache
+// 从缓存中移除文件元素
+function unregisterFileElement(fileId) {
+	fileElementCache.delete(fileId);
+}
+
 // Base64 encoding for binary data (more efficient than hex)
 // Base64编码用于二进制数据（比十六进制更高效）
 function arrayBufferToBase64(buffer) {
@@ -54,21 +77,32 @@ async function calculateHash(data) {
 
 
 
+// Threshold for using streaming compression (10MB)
+const STREAMING_THRESHOLD = 10 * 1024 * 1024;
+// Chunk size for streaming reads (1MB)
+const STREAM_CHUNK_SIZE = 1 * 1024 * 1024;
+
 // Compress file into volumes with optimized compression
 // 将文件压缩为分卷，优化压缩算法
-async function compressFileToVolumes(file, volumeSize = DEFAULT_VOLUME_SIZE) { // 96KB原始数据，base64后约128KB
+async function compressFileToVolumes(file, volumeSize = DEFAULT_VOLUME_SIZE) {
+	// Use streaming approach for large files
+	if (file.size >= STREAMING_THRESHOLD) {
+		return compressFileToVolumesStreaming(file, volumeSize);
+	}
+
+	// Original approach for smaller files
 	return new Promise((resolve, reject) => {
 		const reader = new FileReader();
 		reader.onload = async function(e) {
 			const arrayBuffer = new Uint8Array(e.target.result);
-			
+
 			try {
 				// Calculate hash of original file for integrity
 				const originalHash = await calculateHash(arrayBuffer);
-				
+
 				// Use single compression pass with balanced compression
 				// 使用单次压缩，平衡压缩率和速度
-				deflate(arrayBuffer, { 
+				deflate(arrayBuffer, {
 					level: 6, // 平衡压缩级别
 					mem: 8    // 合理内存使用
 				}, (err, compressed) => {
@@ -76,14 +110,14 @@ async function compressFileToVolumes(file, volumeSize = DEFAULT_VOLUME_SIZE) { /
 						reject(err);
 						return;
 					}
-					
+
 					// Split compressed data into volumes
 					const volumes = [];
 					for (let i = 0; i < compressed.length; i += volumeSize) {
 						const volume = compressed.slice(i, i + volumeSize);
 						volumes.push(arrayBufferToBase64(volume));
 					}
-					
+
 					resolve({
 						volumes,
 						originalSize: file.size,
@@ -97,6 +131,68 @@ async function compressFileToVolumes(file, volumeSize = DEFAULT_VOLUME_SIZE) { /
 		};
 		reader.onerror = () => reject(reader.error);
 		reader.readAsArrayBuffer(file);
+	});
+}
+
+// Streaming compression for large files - reads in chunks to avoid UI blocking
+// 大文件流式压缩 - 分块读取以避免UI阻塞
+async function compressFileToVolumesStreaming(file, volumeSize = DEFAULT_VOLUME_SIZE) {
+	const chunks = [];
+	let offset = 0;
+
+	// Read file in chunks
+	while (offset < file.size) {
+		const chunk = file.slice(offset, offset + STREAM_CHUNK_SIZE);
+		const buffer = await readBlobAsArrayBuffer(chunk);
+		chunks.push(new Uint8Array(buffer));
+		offset += STREAM_CHUNK_SIZE;
+		// Yield to event loop to avoid blocking UI
+		await new Promise(r => setTimeout(r, 0));
+	}
+
+	// Combine chunks
+	const totalLength = chunks.reduce((sum, c) => sum + c.length, 0);
+	const combined = new Uint8Array(totalLength);
+	let pos = 0;
+	for (const chunk of chunks) {
+		combined.set(chunk, pos);
+		pos += chunk.length;
+	}
+
+	// Clear chunk references to allow GC
+	chunks.length = 0;
+
+	// Calculate hash
+	const originalHash = await calculateHash(combined);
+
+	// Compress
+	return new Promise((resolve, reject) => {
+		deflate(combined, { level: 6, mem: 8 }, (err, compressed) => {
+			if (err) return reject(err);
+
+			const volumes = [];
+			for (let i = 0; i < compressed.length; i += volumeSize) {
+				volumes.push(arrayBufferToBase64(compressed.slice(i, i + volumeSize)));
+			}
+
+			resolve({
+				volumes,
+				originalSize: file.size,
+				compressedSize: compressed.length,
+				originalHash
+			});
+		});
+	});
+}
+
+// Helper to read blob as ArrayBuffer
+// 辅助函数：读取Blob为ArrayBuffer
+function readBlobAsArrayBuffer(blob) {
+	return new Promise((resolve, reject) => {
+		const reader = new FileReader();
+		reader.onload = () => resolve(reader.result);
+		reader.onerror = () => reject(reader.error);
+		reader.readAsArrayBuffer(blob);
 	});
 }
 
@@ -401,6 +497,8 @@ async function handleFilesUpload(files, onSend) {
 			updateProgress();
 			
 			// Create file transfer state
+			// Get current room index for cleanup tracking
+			const currentRoomIndex = window.activeRoomIndex !== undefined ? window.activeRoomIndex : -1;
 			const fileTransfer = {
 				fileId,
 				fileName: file.name,
@@ -409,9 +507,10 @@ async function handleFilesUpload(files, onSend) {
 				totalVolumes: volumes.length,
 				sentVolumes: 0,
 				status: 'sending',
-				originalHash
+				originalHash,
+				roomIndex: currentRoomIndex
 			};
-			
+
 			window.fileTransfers.set(fileId, fileTransfer);
 			
 			// Send file start message
@@ -438,6 +537,8 @@ async function handleFilesUpload(files, onSend) {
 			updateProgress();
 			
 			// Create file transfer state for archive
+			// Get current room index for cleanup tracking
+			const archiveRoomIndex = window.activeRoomIndex !== undefined ? window.activeRoomIndex : -1;
 			const fileTransfer = {
 				fileId,
 				fileName: `${files.length} files.zip`, // Virtual archive name
@@ -449,9 +550,10 @@ async function handleFilesUpload(files, onSend) {
 				archiveHash,
 				fileCount,
 				fileManifest,
-				isArchive: true
+				isArchive: true,
+				roomIndex: archiveRoomIndex
 			};
-			
+
 			window.fileTransfers.set(fileId, fileTransfer);
 			
 			// Send archive start message
@@ -534,90 +636,98 @@ async function sendVolumes(fileId, volumes, onSend, updateProgress, fileName) {
 	sendNextBatch();
 }
 
-// Update file progress in chat
-// 更新聊天中的文件进度
+// Update file progress in chat using cached DOM elements
+// 使用缓存的DOM元素更新聊天中的文件进度
 function updateFileProgress(fileId) {
 	const transfer = window.fileTransfers.get(fileId);
 	if (!transfer) return;
-	const elements = document.querySelectorAll(`[data-file-id="${fileId}"]`);
-	elements.forEach(element => {
-		const progressContainer = element.querySelector('.file-progress-container');
-		const progressBar = element.querySelector('.file-progress');
-		const statusText = element.querySelector('.file-status');
-		const downloadBtn = element.querySelector('.file-download-btn');
-		
-		// 判断是否为发送方（发送方没有volumeData）
-		const isSender = !transfer.volumeData || transfer.volumeData.length === 0;
-		
-		if (transfer.status === 'sending') {
-			const progress = (transfer.sentVolumes / transfer.totalVolumes) * 100;
-			if (progressContainer) {
-				progressContainer.style.display = 'block';
-				progressContainer.classList.remove('fade-out');
-			}
-			if (progressBar) progressBar.style.width = `${progress}%`;
-			if (statusText) statusText.textContent = `Sending ${transfer.sentVolumes}/${transfer.totalVolumes}`;
-			if (downloadBtn) {
+
+	let cached = fileElementCache.get(fileId);
+
+	// Cache miss or element disconnected - try to find and cache it
+	if (!cached || !cached.element?.isConnected) {
+		// Clear stale cache entry
+		if (cached) {
+			fileElementCache.delete(fileId);
+		}
+		const element = document.querySelector(`[data-file-id="${fileId}"]`);
+		if (!element) return;
+		registerFileElement(fileId, element);
+		cached = fileElementCache.get(fileId);
+	}
+
+	const { progressContainer, progressBar, statusText, downloadBtn } = cached;
+
+	// Determine if sender (sender has no volumeData)
+	const isSender = !transfer.volumeData || transfer.volumeData.length === 0;
+
+	if (transfer.status === 'sending') {
+		const progress = (transfer.sentVolumes / transfer.totalVolumes) * 100;
+		if (progressContainer) {
+			progressContainer.style.display = 'block';
+			progressContainer.classList.remove('fade-out');
+		}
+		if (progressBar) progressBar.style.width = `${progress}%`;
+		if (statusText) statusText.textContent = `Sending ${transfer.sentVolumes}/${transfer.totalVolumes}`;
+		if (downloadBtn) {
+			downloadBtn.classList.remove('show', 'animate-in');
+			downloadBtn.style.display = 'none';
+		}
+	} else if (transfer.status === 'receiving') {
+		const progress = (transfer.receivedVolumes.size / transfer.totalVolumes) * 100;
+		if (progressContainer) {
+			progressContainer.style.display = 'block';
+			progressContainer.classList.remove('fade-out');
+		}
+		if (progressBar) progressBar.style.width = `${progress}%`;
+		if (statusText) statusText.textContent = `Receiving ${transfer.receivedVolumes.size}/${transfer.totalVolumes}`;
+		if (downloadBtn) {
+			downloadBtn.classList.remove('show', 'animate-in');
+			downloadBtn.style.display = 'none';
+		}
+	} else if (transfer.status === 'completed') {
+		// Completion animation sequence
+		if (progressContainer) {
+			progressContainer.classList.add('fade-out');
+			setTimeout(() => {
+				progressContainer.style.display = 'none';
+			}, 400);
+		}
+
+		if (downloadBtn) {
+			// Only show download button for receiver
+			if (isSender) {
 				downloadBtn.classList.remove('show', 'animate-in');
 				downloadBtn.style.display = 'none';
-			}
-		} else if (transfer.status === 'receiving') {
-			const progress = (transfer.receivedVolumes.size / transfer.totalVolumes) * 100;
-			if (progressContainer) {
-				progressContainer.style.display = 'block';
-				progressContainer.classList.remove('fade-out');
-			}
-			if (progressBar) progressBar.style.width = `${progress}%`;
-			if (statusText) statusText.textContent = `Receiving ${transfer.receivedVolumes.size}/${transfer.totalVolumes}`;
-			if (downloadBtn) {
-				downloadBtn.classList.remove('show', 'animate-in');
-				downloadBtn.style.display = 'none';
-			}
-		} else if (transfer.status === 'completed') {
-			// 传输完成时的动画序列
-			if (progressContainer) {
-				// 先添加淡出动画类
-				progressContainer.classList.add('fade-out');
-				// 延迟后完全隐藏
+			} else {
+				// Delay showing download button until progress bar fades
 				setTimeout(() => {
-					progressContainer.style.display = 'none';
-				}, 400);
-			}
-			
-			if (downloadBtn) {
-				// 只有接收方才显示下载按钮
-				if (isSender) {
-					downloadBtn.classList.remove('show', 'animate-in');
-					downloadBtn.style.display = 'none';
-				} else {
-					// 延迟显示下载按钮，等进度条消失动画完成
+					downloadBtn.style.display = 'flex';
+					downloadBtn.classList.add('show');
+					downloadBtn.disabled = false;
 					setTimeout(() => {
-						downloadBtn.style.display = 'flex';
-						downloadBtn.classList.add('show');
-						downloadBtn.disabled = false;
-						// 添加进入动画
-						setTimeout(() => {
-							downloadBtn.classList.add('animate-in');
-						}, 50);
-						// 清理动画类
-						setTimeout(() => {
-							downloadBtn.classList.remove('animate-in');
-						}, 550);
-					}, 200);
-				}
+						downloadBtn.classList.add('animate-in');
+					}, 50);
+					setTimeout(() => {
+						downloadBtn.classList.remove('animate-in');
+					}, 550);
+				}, 200);
 			}
 		}
-	});
+
+		// Clean up cache after completion animation
+		setTimeout(() => unregisterFileElement(fileId), 1000);
+	}
 }
 
 // Handle incoming file messages
 // 处理接收到的文件消息
-export function handleFileMessage(message, isPrivate = false) {
+export function handleFileMessage(message, isPrivate = false, roomIndex = -1) {
 	const { type, fileId, userName } = message;
-	
+
 	switch (type) {
 		case 'file_start':
-			handleFileStart(message, isPrivate);
+			handleFileStart(message, isPrivate, roomIndex);
 			break;
 		case 'file_volume':
 			handleFileVolume(message);
@@ -630,9 +740,9 @@ export function handleFileMessage(message, isPrivate = false) {
 
 // Handle file start message
 // 处理文件开始消息
-function handleFileStart(message, isPrivate) {
+function handleFileStart(message, isPrivate, roomIndex = -1) {
 	const { fileId, fileName, originalSize, compressedSize, totalVolumes, originalHash, archiveHash, fileCount, fileManifest, isArchive, userName } = message;
-	
+
 	const fileTransfer = {
 		fileId,
 		fileName,
@@ -647,9 +757,10 @@ function handleFileStart(message, isPrivate) {
 		fileCount,
 		fileManifest,
 		isArchive,
-		userName // 记录发送者名字
+		userName, // 记录发送者名字
+		roomIndex // Track room for cleanup
 	};
-	
+
 	window.fileTransfers.set(fileId, fileTransfer);
 	
 	// 添加文件消息到聊天

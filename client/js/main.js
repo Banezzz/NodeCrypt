@@ -2,6 +2,15 @@
 // Import the NodeCrypt module (used for encryption)
 import './NodeCrypt.js';
 
+// 导入全局错误处理（自动注册全局监听器）
+// Import global error handling (auto-registers global listeners)
+import './util.error.js';
+
+// 导入用户和消息工具模块（确保被打包）
+// Import user and message utilities (ensure they're bundled)
+import './util.user.js';
+import './util.message.js';
+
 // 从 util.file.js 中导入设置文件发送的函数
 // Import setupFileSend function from util.file.js
 import {

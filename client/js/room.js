@@ -21,8 +21,29 @@ import {
 	createElement
 } from './util.dom.js';
 import { t } from './util.i18n.js';
+
+// Maximum messages to keep per room to prevent memory growth
+// 每个房间最大消息数量，防止内存增长
+const MAX_MESSAGES_PER_ROOM = 500;
+
 let roomsData = [];
 let activeRoomIndex = -1;
+
+// Trim messages array if it exceeds the limit
+// 如果消息数组超过限制则裁剪
+function trimMessages(messages) {
+	if (messages && messages.length > MAX_MESSAGES_PER_ROOM) {
+		messages.splice(0, messages.length - MAX_MESSAGES_PER_ROOM);
+	}
+}
+
+// Push a message and automatically trim to prevent memory growth
+// 推送消息并自动裁剪以防止内存增长
+export function pushMessage(rd, msg) {
+	if (!rd || !rd.messages) return;
+	rd.messages.push(msg);
+	trimMessages(rd.messages);
+}
 
 // Get a new room data object
 // 获取一个新的房间数据对象
@@ -192,7 +213,7 @@ export function handleClientSecured(idx, user) {
 	if (isNew) {
 		rd.knownUserIds.add(user.clientId);		const name = user.userName || user.username || user.name || t('ui.anonymous', 'Anonymous');
 		const msg = `${name} ${t('system.joined', 'joined the conversation')}`;
-		rd.messages.push({
+		pushMessage(rd, {
 			type: 'system',
 			text: msg
 		});
@@ -218,7 +239,7 @@ export function handleClientLeft(idx, clientId) {
 	const user = rd.userMap[clientId];
 	const name = user ? (user.userName || user.username || user.name || 'Anonymous') : 'Anonymous';
 	const msg = `${name} ${t('system.left', 'left the conversation')}`;
-	rd.messages.push({
+	pushMessage(rd, {
 		type: 'system',
 		text: msg
 	});
@@ -261,13 +282,13 @@ export function handleClientMessage(idx, msg) {
 				);
 
 				if (!messageAlreadyInHistory) {
-					newRd.messages.push({
+					pushMessage(newRd, {
 						type: 'other',
 						text: msg.data, // This is the file metadata object
 						userName: realUserName,
 						avatar: realUserName,
 						msgType: historyMsgType,
-						timestamp: (msg.data && msg.data.timestamp) || Date.now() 
+						timestamp: (msg.data && msg.data.timestamp) || Date.now()
 					});
 				}
 			}
@@ -283,7 +304,7 @@ export function handleClientMessage(idx, msg) {
 			// If it's the active room, delegate to util.file.js to handle UI and file transfer state.
 			// This applies to all file-related messages (file_start, file_volume, file_end, etc.)
 			if (window.handleFileMessage) {
-				window.handleFileMessage(msg.data, msgType.includes('_private'));
+				window.handleFileMessage(msg.data, msgType.includes('_private'), idx);
 			}
 		} else {
 			// If it's not the active room, only increment unread count for 'file_start' messages.
@@ -312,7 +333,7 @@ export function handleClientMessage(idx, msg) {
 	}
 
 	// Add message to messages array for chat history
-	roomsData[idx].messages.push({
+	pushMessage(roomsData[idx], {
 		type: 'other',
 		text: msg.data,
 		userName: realUserName,
@@ -354,26 +375,67 @@ export function togglePrivateChat(targetId, targetName) {
 }
 
 
+// Clean up file transfers for a specific room
+// 清理特定房间的文件传输
+function cleanupRoomFileTransfers(roomIndex) {
+	if (!window.fileTransfers) return;
+	for (const [fileId, transfer] of window.fileTransfers.entries()) {
+		// Clean up all transfers belonging to this room (regardless of status)
+		if (transfer.roomIndex === roomIndex) {
+			window.fileTransfers.delete(fileId);
+		}
+		// For backwards compatibility: clean up completed transfers without roomIndex
+		else if (transfer.roomIndex === undefined && transfer.status === 'completed') {
+			window.fileTransfers.delete(fileId);
+		}
+	}
+}
+
 // Exit the current room
 // 退出当前房间
 export function exitRoom() {
 	if (activeRoomIndex >= 0 && roomsData[activeRoomIndex]) {
-		const chatInst = roomsData[activeRoomIndex].chat;
-		if (chatInst && typeof chatInst.destruct === 'function') {
-			chatInst.destruct()
-		} else if (chatInst && typeof chatInst.disconnect === 'function') {
-			chatInst.disconnect()
+		const rd = roomsData[activeRoomIndex];
+
+		// 1. Disconnect chat instance
+		if (rd.chat?.destruct) rd.chat.destruct();
+		else if (rd.chat?.disconnect) rd.chat.disconnect();
+
+		// 2. Clean up all room data to avoid dangling references
+		rd.chat = null;
+		if (rd.messages) {
+			rd.messages.length = 0;
+			rd.messages = null;
 		}
-		roomsData[activeRoomIndex].chat = null;
+		if (rd.userList) {
+			rd.userList.length = 0;
+			rd.userList = null;
+		}
+		rd.userMap = null;
+		rd.prevUserList = null;
+		if (rd.knownUserIds) {
+			rd.knownUserIds.clear();
+			rd.knownUserIds = null;
+		}
+		rd.privateChatTargetId = null;
+		rd.privateChatTargetName = null;
+
+		// 3. Clean up file transfers for this room
+		cleanupRoomFileTransfers(activeRoomIndex);
+
+		// 4. Remove room from array
 		roomsData.splice(activeRoomIndex, 1);
+
+		// 5. Reset activeRoomIndex
 		if (roomsData.length > 0) {
 			switchRoom(0);
-			return true
+			return true;
 		} else {
-			return false
+			activeRoomIndex = -1;
+			return false;
 		}
 	}
-	return false
+	return false;
 }
 
 export { roomsData, activeRoomIndex };

@@ -29,12 +29,18 @@ class NodeCrypt {
 			pingInterval: config.pingInterval || 20000,
 			debug: config.debug || false,
 		};
+		// Exponential backoff reconnection settings
+		this.reconnectAttempts = 0;
+		this.maxReconnectAttempts = 10;
+		this.baseReconnectDelay = 1000;
+		this.maxReconnectDelay = 30000;
 		this.callbacks = {
 			onServerClosed: callbacks.onServerClosed || null,
 			onServerSecured: callbacks.onServerSecured || null,
 			onClientSecured: callbacks.onClientSecured || null,
 			onClientList: callbacks.onClientList || null,
 			onClientMessage: callbacks.onClientMessage || null,
+			onReconnectFailed: callbacks.onReconnectFailed || null,
 		};
 		this.SERVER_KEY_STORAGE = 'nodecrypt_server_key';
 		try {
@@ -161,6 +167,8 @@ class NodeCrypt {
 	// WebSocket 连接打开事件处理
 	async onOpen() {
 		this.logEvent('onOpen');
+		// Reset reconnect attempts on successful connection
+		this.reconnectAttempts = 0;
 		this.startPing();
 		try {
 			this.serverKeys = await crypto.subtle.generateKey({
@@ -409,15 +417,31 @@ class NodeCrypt {
 		return (!this.connection || !this.connection.readyState || this.connection.readyState === WebSocket.CLOSED ? true : false)
 	}
 
-	// Start reconnect timer
-	// 启动重连定时器
+	// Start reconnect timer with exponential backoff
+	// 启动带指数退避的重连定时器
 	startReconnect() {
+		if (this.reconnectAttempts >= this.maxReconnectAttempts) {
+			this.logEvent('startReconnect', 'Max reconnect attempts reached');
+			if (this.callbacks.onReconnectFailed) {
+				try {
+					this.callbacks.onReconnectFailed();
+				} catch (error) {
+					this.logEvent('startReconnect-callback', error, 'error');
+				}
+			}
+			return;
+		}
 		this.stopReconnect();
-		this.logEvent('startReconnect');
+		const delay = Math.min(
+			this.baseReconnectDelay * Math.pow(2, this.reconnectAttempts),
+			this.maxReconnectDelay
+		);
+		this.logEvent('startReconnect', `Attempt ${this.reconnectAttempts + 1}/${this.maxReconnectAttempts}, delay: ${delay}ms`);
 		this.reconnect = setTimeout(() => {
 			this.reconnect = null;
-			this.connect()
-		}, this.config.reconnectDelay)
+			this.reconnectAttempts++;
+			this.connect();
+		}, delay);
 	}
 
 	// Stop reconnect timer

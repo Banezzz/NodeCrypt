@@ -5,7 +5,8 @@ import {
 } from './util.avatar.js';
 import {
 	roomsData,
-	activeRoomIndex
+	activeRoomIndex,
+	pushMessage
 } from './room.js';
 import {
 	escapeHTML,
@@ -50,12 +51,12 @@ export function addMsg(text, isHistory = false, msgType = 'text', timestamp = nu
 	let ts = isHistory ? timestamp : (timestamp || Date.now());
 	if (!ts) return;
 	if (!isHistory && activeRoomIndex >= 0) {
-		roomsData[activeRoomIndex].messages.push({
+		pushMessage(roomsData[activeRoomIndex], {
 			type: 'me',
 			text,
 			msgType,
 			timestamp: ts
-		})
+		});
 	}	const chatArea = $id('chat-area');
 	if (!chatArea) return;
 	let className = 'bubble me' + (msgType.includes('_private') ? ' private-message' : '');
@@ -209,11 +210,11 @@ export function addOtherMsg(msg, userName = '', avatar = '', isHistory = false, 
 export function addSystemMsg(text, isHistory = false, timestamp = null) {
 	if (!isHistory && activeRoomIndex >= 0) {
 		const ts = timestamp || Date.now();
-		roomsData[activeRoomIndex].messages.push({
+		pushMessage(roomsData[activeRoomIndex], {
 			type: 'system',
 			text,
 			timestamp: ts
-		})
+		});
 	}
 	const chatArea = $id('chat-area');
 	if (!chatArea) return;
