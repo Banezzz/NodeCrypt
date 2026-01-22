@@ -47,6 +47,12 @@ import {
 	initTheme            // 初始化主题 / Initialize theme
 } from './util.theme.js';
 
+// 从 util.colorMode.js 中导入颜色模式功能函数
+// Import color mode functions from util.colorMode.js
+import {
+	initColorMode        // 初始化颜色模式 / Initialize color mode
+} from './util.colorMode.js';
+
 // 从 util.dom.js 中导入常用 DOM 操作函数
 // Import common DOM manipulation functions from util.dom.js
 import {
@@ -151,6 +157,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	// 由于我们已经在DOM加载前预先初始化了语言设置，这里不需要重复初始化
 	// initSettings();
 	// updateStaticTexts(); // 在初始化设置后更新静态文本 / Update static texts after initializing settings
+	initColorMode(); // 初始化颜色模式（深色/浅色）/ Initialize color mode (dark/light)
 	initTheme(); // 初始化主题 / Initialize theme
 	
 	const settingsBtn = $id('settings-btn'); // 设置按钮 / Settings button

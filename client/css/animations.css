@@ -1,0 +1,430 @@
+/* ====== NodeCrypt Animation System ====== */
+/* 动画系统 */
+
+/* === Entrance Animations / 入场动画 === */
+@keyframes fade-in {
+	from { opacity: 0; }
+	to { opacity: 1; }
+}
+
+@keyframes fade-in-up {
+	from {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fade-in-down {
+	from {
+		opacity: 0;
+		transform: translateY(-10px);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes fade-in-scale {
+	from {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+@keyframes slide-in-left {
+	from {
+		opacity: 0;
+		transform: translateX(-20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes slide-in-right {
+	from {
+		opacity: 0;
+		transform: translateX(20px);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes slide-up {
+	from {
+		transform: translateY(100%);
+	}
+	to {
+		transform: translateY(0);
+	}
+}
+
+@keyframes slide-down {
+	from {
+		transform: translateY(-100%);
+	}
+	to {
+		transform: translateY(0);
+	}
+}
+
+/* === Pulse/Glow Animations / 脉冲/发光动画 === */
+@keyframes pulse {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.7; }
+}
+
+@keyframes pulse-scale {
+	0%, 100% { transform: scale(1); }
+	50% { transform: scale(1.05); }
+}
+
+@keyframes glow-pulse {
+	0%, 100% { box-shadow: 0 0 5px var(--accent-500); }
+	50% { box-shadow: 0 0 20px var(--accent-500); }
+}
+
+@keyframes border-glow {
+	0%, 100% { border-color: var(--accent-500); }
+	50% { border-color: var(--accent-400); }
+}
+
+/* === Skeleton/Loading Animations / 骨架屏/加载动画 === */
+@keyframes shimmer {
+	0% { background-position: -200% 0; }
+	100% { background-position: 200% 0; }
+}
+
+@keyframes spin {
+	from { transform: rotate(0deg); }
+	to { transform: rotate(360deg); }
+}
+
+@keyframes bounce {
+	0%, 100% { transform: translateY(0); }
+	50% { transform: translateY(-5px); }
+}
+
+/* === Typing Indicator / 打字指示器 === */
+@keyframes typing-dot {
+	0%, 60%, 100% { transform: translateY(0); }
+	30% { transform: translateY(-4px); }
+}
+
+/* === Message Bubble Animation / 消息气泡动画 === */
+@keyframes bubble-in {
+	from {
+		opacity: 0;
+		transform: translateY(10px) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translateY(0) scale(1);
+	}
+}
+
+@keyframes bubble-in-left {
+	from {
+		opacity: 0;
+		transform: translateX(-10px) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0) scale(1);
+	}
+}
+
+@keyframes bubble-in-right {
+	from {
+		opacity: 0;
+		transform: translateX(10px) scale(0.95);
+	}
+	to {
+		opacity: 1;
+		transform: translateX(0) scale(1);
+	}
+}
+
+/* === Exit Animations / 退出动画 === */
+@keyframes fade-out {
+	from { opacity: 1; }
+	to { opacity: 0; }
+}
+
+@keyframes fade-out-down {
+	from {
+		opacity: 1;
+		transform: translateY(0);
+	}
+	to {
+		opacity: 0;
+		transform: translateY(10px);
+	}
+}
+
+@keyframes scale-out {
+	from {
+		opacity: 1;
+		transform: scale(1);
+	}
+	to {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+}
+
+/* === Utility Animation Classes / 动画工具类 === */
+.animate-fade-in {
+	animation: fade-in var(--duration-normal) var(--ease-out);
+}
+
+.animate-fade-in-up {
+	animation: fade-in-up var(--duration-normal) var(--ease-out);
+}
+
+.animate-fade-in-down {
+	animation: fade-in-down var(--duration-normal) var(--ease-out);
+}
+
+.animate-fade-in-scale {
+	animation: fade-in-scale var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-in-left {
+	animation: slide-in-left var(--duration-normal) var(--ease-out);
+}
+
+.animate-slide-in-right {
+	animation: slide-in-right var(--duration-normal) var(--ease-out);
+}
+
+.animate-bubble-in {
+	animation: bubble-in var(--duration-fast) var(--ease-spring);
+}
+
+.animate-pulse {
+	animation: pulse 2s ease-in-out infinite;
+}
+
+.animate-glow {
+	animation: glow-pulse 2s ease-in-out infinite;
+}
+
+.animate-spin {
+	animation: spin 1s linear infinite;
+}
+
+.animate-bounce {
+	animation: bounce 1s ease-in-out infinite;
+}
+
+/* === Transition Utility Classes / 过渡工具类 === */
+.transition-colors {
+	transition:
+		color var(--duration-fast) var(--ease-out),
+		background-color var(--duration-fast) var(--ease-out),
+		border-color var(--duration-fast) var(--ease-out);
+}
+
+.transition-transform {
+	transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.transition-opacity {
+	transition: opacity var(--duration-fast) var(--ease-out);
+}
+
+.transition-shadow {
+	transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.transition-all {
+	transition: all var(--duration-fast) var(--ease-out);
+}
+
+/* === Delay Classes / 延迟类 === */
+.delay-100 { animation-delay: 100ms; }
+.delay-200 { animation-delay: 200ms; }
+.delay-300 { animation-delay: 300ms; }
+.delay-400 { animation-delay: 400ms; }
+.delay-500 { animation-delay: 500ms; }
+
+/* === Duration Classes / 时长类 === */
+.duration-fast { animation-duration: var(--duration-fast); }
+.duration-normal { animation-duration: var(--duration-normal); }
+.duration-slow { animation-duration: var(--duration-slow); }
+
+/* === Typing Indicator Component / 打字指示器组件 === */
+.typing-indicator {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 8px 12px;
+	background: var(--bg-tertiary);
+	border-radius: 16px;
+}
+
+.typing-indicator .dot {
+	width: 6px;
+	height: 6px;
+	background: var(--text-muted);
+	border-radius: 50%;
+	animation: typing-dot 1.4s ease-in-out infinite;
+}
+
+.typing-indicator .dot:nth-child(2) {
+	animation-delay: 0.2s;
+}
+
+.typing-indicator .dot:nth-child(3) {
+	animation-delay: 0.4s;
+}
+
+/* === Skeleton Loading Component / 骨架屏加载组件 === */
+.skeleton {
+	background: linear-gradient(
+		90deg,
+		var(--gray-200) 25%,
+		var(--gray-100) 50%,
+		var(--gray-200) 75%
+	);
+	background-size: 200% 100%;
+	animation: shimmer 1.5s ease-in-out infinite;
+	border-radius: 4px;
+}
+
+[data-theme="dark"] .skeleton {
+	background: linear-gradient(
+		90deg,
+		var(--gray-700) 25%,
+		var(--gray-600) 50%,
+		var(--gray-700) 75%
+	);
+	background-size: 200% 100%;
+}
+
+.skeleton-text {
+	height: 1em;
+	margin-bottom: 0.5em;
+}
+
+.skeleton-avatar {
+	width: 40px;
+	height: 40px;
+	border-radius: 50%;
+}
+
+.skeleton-button {
+	height: 36px;
+	width: 100px;
+	border-radius: 8px;
+}
+
+/* === Reduced Motion Support / 减少动画支持（无障碍） === */
+@media (prefers-reduced-motion: reduce) {
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+		scroll-behavior: auto !important;
+	}
+}
+
+/* === Hover Animation Enhancements / 悬停动画增强 === */
+.hover-lift {
+	transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.hover-lift:hover {
+	transform: translateY(-2px);
+}
+
+.hover-scale {
+	transition: transform var(--duration-fast) var(--ease-out);
+}
+
+.hover-scale:hover {
+	transform: scale(1.02);
+}
+
+.hover-glow {
+	transition: box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.hover-glow:hover {
+	box-shadow: var(--shadow-glow);
+}
+
+/* === Active State Animations / 激活状态动画 === */
+.active-scale:active {
+	transform: scale(0.98);
+}
+
+.active-press:active {
+	transform: translateY(1px);
+}
+
+/* === Focus Animations / 焦点动画 === */
+.focus-ring:focus-visible {
+	outline: none;
+	box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* === Notification Badge Animation / 通知徽章动画 === */
+@keyframes badge-pop {
+	0% {
+		transform: scale(0);
+		opacity: 0;
+	}
+	50% {
+		transform: scale(1.2);
+	}
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+.badge-animated {
+	animation: badge-pop var(--duration-normal) var(--ease-spring);
+}
+
+/* === Page Transition / 页面过渡 === */
+.page-enter {
+	animation: fade-in-up var(--duration-slow) var(--ease-out);
+}
+
+.page-exit {
+	animation: fade-out-down var(--duration-normal) var(--ease-out);
+}
+
+/* === Modal Animations / 模态框动画 === */
+.modal-backdrop-enter {
+	animation: fade-in var(--duration-normal) var(--ease-out);
+}
+
+.modal-content-enter {
+	animation: fade-in-scale var(--duration-normal) var(--ease-spring);
+}
+
+.modal-backdrop-exit {
+	animation: fade-out var(--duration-fast) var(--ease-out);
+}
+
+.modal-content-exit {
+	animation: scale-out var(--duration-fast) var(--ease-out);
+}

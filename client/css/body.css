@@ -1,7 +1,8 @@
 body {
-	background: #fff;
+	background: var(--bg-primary);
 	font-family: 'Roboto', Arial, sans-serif;
 	margin: 0;
+	color: var(--text-primary);
 }
 
 /* 翻转卡片样式 / Flip Card Styles */
@@ -35,12 +36,13 @@ body {
 	height: 100%;
 	border-radius: 14px;
 	padding: 39px 15px 20px 15px;
-	box-shadow: 0 2px 16px rgba(60, 80, 100, 0.09);
-	background: #fff;
+	box-shadow: var(--shadow-lg);
+	background: var(--bg-elevated);
 	box-sizing: border-box;
 	display: flex;
 	flex-direction: column;
 	backface-visibility: hidden;
+	border: 1px solid var(--border-primary);
 }
 
 .flip-card-back {
@@ -54,7 +56,7 @@ body {
 	right: 16px;
 	background: none;
 	border: 0px;
-	color: #666;
+	color: var(--text-secondary);
 	width: 40px;
 	height: 40px;
 	border-radius: 50%;
@@ -62,7 +64,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: all 0.3s ease;
+	transition: all var(--duration-normal) var(--ease-out);
 	z-index: 10;
 }
 
@@ -80,9 +82,9 @@ body {
 }
 
 .help-btn:hover {
-	background: #30a8f7;
-	border-color: #30a8f7;
-	color: #fff;
+	background: var(--accent-500);
+	border-color: var(--accent-500);
+	color: var(--text-inverse);
 	transform: scale(1.1);
 }
 
@@ -96,7 +98,7 @@ body {
 	max-height: 400px;
 	overflow-y: auto;
 	padding: 0 20px 20px 20px;
-	color: #333;
+	color: var(--text-primary);
 	line-height: 1.6;
 }
 
@@ -106,7 +108,7 @@ body {
 
 .help-section h3 {
 	font-size: 1.1rem;
-	color: #4A5568;
+	color: var(--text-primary);
 	margin-bottom: 12px;
 	font-weight: 600;
 	display: flex;
@@ -116,7 +118,7 @@ body {
 
 .help-section p {
 	font-size: 0.95rem;
-	color: #666;
+	color: var(--text-secondary);
 	margin-bottom: 12px;
 	line-height: 1.5;
 }
@@ -124,7 +126,7 @@ body {
 .help-section ol,
 .help-section ul {
 	font-size: 0.9rem;
-	color: #666;
+	color: var(--text-secondary);
 	margin-left: 16px;
 	margin-bottom: 12px;
 }
@@ -135,7 +137,7 @@ body {
 }
 
 .help-section li strong {
-	color: #2D3748;
+	color: var(--text-primary);
 	font-weight: 600;
 }
 
@@ -145,17 +147,17 @@ body {
 }
 
 .help-content::-webkit-scrollbar-track {
-	background: #f1f1f1;
+	background: var(--scrollbar-track);
 	border-radius: 3px;
 }
 
 .help-content::-webkit-scrollbar-thumb {
-	background: #c1c1c1;
+	background: var(--scrollbar-thumb);
 	border-radius: 3px;
 }
 
 .help-content::-webkit-scrollbar-thumb:hover {
-	background: #a8a8a8;
+	background: var(--scrollbar-thumb-hover);
 }
 
 .login-container {
@@ -178,7 +180,7 @@ body {
 }
 
 .subtips {
-	color: #7a7a7a;
+	color: var(--text-secondary);
 	margin-bottom: 26px;
 	font-size: 1rem;
 }
@@ -199,52 +201,53 @@ body {
 
 .input-group label:not(.floating-label) {
 	font-size: 0.98rem;
-	color: #888;
+	color: var(--text-secondary);
 	margin-bottom: 6px;
 	margin-left: 2px;
 }
 
 .input-group .optional {
-	color: #b5b5b5;
+	color: var(--text-muted);
 	font-size: 0.92em;
 	margin-left: 4px;
 }
 
 .input-group input {
 	width: 92%;
-	border: 1px solid #e5e5e5;
+	border: 1px solid var(--input-border);
 	border-radius: 10px;
 	padding: 14px 14px;
 	font-size: 1.1rem;
 	outline: none;
-	background: #fafbfc;
-	transition: border-color 0.2s ease, background-color 0.2s ease, box-shadow 0.2s ease;
+	background: var(--input-bg);
+	color: var(--input-text);
+	transition: border-color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .input-group input:focus {
-	border-color: #30a8f7;
-	background: #fff;
-	box-shadow: 0 0 0 3px rgba(48, 168, 247, 0.1);
+	border-color: var(--accent-500);
+	background: var(--bg-elevated);
+	box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
 .login-btn {
 	margin-top: 20px;
-	background: #30a8f7;
+	background: var(--btn-primary-bg);
 	border: none;
-	color: #fff;
+	color: var(--btn-primary-text);
 	font-size: 1.2rem;
 	font-weight: 500;
 	border-radius: 12px;
 	padding: 14px 0;
 	cursor: pointer;
 	letter-spacing: 1px;
-	transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+	transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .login-btn:hover,
 .login-btn:focus {
-	background: #2196e3;
-	box-shadow: 0 4px 12px rgba(48, 168, 247, 0.3);
+	background: var(--btn-primary-hover);
+	box-shadow: var(--shadow-glow);
 }
 
 .login-btn:active {
@@ -269,7 +272,7 @@ body {
 	top: 0;
 	right: 0;
 	bottom: 0;
-	background: rgba(255, 255, 255, 0.5);
+	background: var(--bg-overlay);
 	backdrop-filter: blur(12px);
 	z-index: 1;
 }
@@ -277,13 +280,14 @@ body {
 .login-modal-card {
 	position: relative;
 	z-index: 2;
-	background: #fff;
+	background: var(--bg-elevated);
 	border-radius: 14px;
-	box-shadow: 0 2px 16px rgba(60, 80, 100, 0.13);
+	box-shadow: var(--shadow-xl);
 	padding: 32px 24px 24px 24px;
 	min-width: 200px;
 	width: 400px;
 	text-align: center;
+	border: 1px solid var(--border-primary);
 }
 
 .login-modal-card form {
@@ -299,15 +303,15 @@ body {
 	background: none;
 	border: none;
 	font-size: 1.7rem;
-	color: #888;
+	color: var(--text-muted);
 	cursor: pointer;
 	z-index: 3;
 	line-height: 1;
-	transition: color 0.2s ease, transform 0.2s ease;
+	transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .login-modal-close:hover {
-	color: #30a8f7;
+	color: var(--accent-500);
 	transform: scale(1.1);
 }
 
@@ -391,7 +395,7 @@ body {
 	right: 15px;
 	top: 15px;
 	font-size: 2.6rem;
-	color: #bbb;
+	color: var(--text-muted);
 	background: none;
 	border-radius: 50%;
 	width: 48px;
@@ -403,12 +407,12 @@ body {
 	z-index: 10000;
 	line-height: 1;
 	box-shadow: none;
-	transition: background-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+	transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .img-modal-close:hover {
 	background: rgba(80, 80, 80, 0.25);
-	color: #fff;
+	color: var(--text-inverse);
 	transform: scale(1.1);
 }
 
@@ -421,8 +425,8 @@ body {
 	line-height: 1.4;
 	position: relative;
 	word-break: break-word;
-	background: #f0f4f8b3;
-	color: #555;
+	background: var(--bubble-system);
+	color: var(--bubble-system-text);
 	display: inline-block;
 	text-align: center;
 }
@@ -462,7 +466,7 @@ body {
 
 .chat-attach-btn-abs:hover {
 	transform: translateY(-50%) scale(1.1);
-	color: #30a8f7;
+	color: var(--accent-500);
 }
 
 .input-message-input-init {
@@ -498,7 +502,7 @@ body {
 .main-header-members {
 	margin-left: 10px;
 	font-size: 13px;
-	color: #888;
+	color: var(--text-secondary);
 }
 
 .img-modal-content-overflow {
@@ -514,30 +518,31 @@ body {
 
 
 .send-message-btn {
-  background: rgb(3, 169, 244);
+  background: var(--btn-primary-bg);
   background: linear-gradient(
     138deg,
-    rgba(3, 169, 244, 1) 15%,
-    rgba(63, 180, 233, 1) 65%
+    var(--accent-500) 15%,
+    var(--accent-400) 65%
   );
   position: relative;
   cursor: pointer;
   font-size: 17px;
   padding: 0.7em 0.7em;
   border-radius: 50px;
-  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   margin: 0px 0px 3px 7px;
-  transition: all 0.3s ease;
+  transition: all var(--duration-normal) var(--ease-out);
   z-index: 10;
 }
 .send-message-btn:hover {
   transform: translateY(-2px);
-  transition: all 0.3s ease;
+  box-shadow: var(--shadow-glow);
+  transition: all var(--duration-normal) var(--ease-out);
 }
 .send-message-btn:active {
   transform: scale(0.95) translateY(0px);
-  box-shadow: 0 0.3rem 0.8rem rgba(3, 169, 244, 0.2);
-  transition: all 0.1s ease;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-fast) var(--ease-out);
 }
 .send-message-btn .text {
   display: flex;

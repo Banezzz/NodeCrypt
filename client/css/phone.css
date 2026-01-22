@@ -80,15 +80,15 @@
 		bottom: 0;
 		z-index: 1000;
 		height: 100dvh;
-		background: #fff;
-		box-shadow: 2px 0 16px #0002;
-		transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+		background: var(--bg-secondary);
+		box-shadow: var(--shadow-lg);
+		transition: transform var(--duration-normal) var(--ease-out), background-color var(--duration-normal) var(--ease-out);
 	}
 
 	.sidebar {
 		left: 0;
 		transform: translateX(-100%);
-		border-right: 1px solid #e0e0e0;
+		border-right: 1px solid var(--border-primary);
 	}
 
 	.sidebar.mobile-open {
@@ -97,7 +97,7 @@
 
 	.settings-sidebar {
 		transform: translateX(-100%);
-		border-right: 1px solid #e0e0e0;
+		border-right: 1px solid var(--border-primary);
 		z-index: 1001; /* Higher than normal sidebar */
 	}
 
@@ -109,7 +109,7 @@
 		right: 0;
 		max-width: 70vw;
 		transform: translateX(100%);
-		border-left: 1px solid #e0e0e0;
+		border-left: 1px solid var(--border-primary);
 	}
 
 	.rightbar.mobile-open {
@@ -124,7 +124,7 @@
 		top: 0;
 		right: 0;
 		bottom: 0;
-		background: rgba(0, 0, 0, 0.18);
+		background: var(--bg-overlay);
 		z-index: 999;
 	}
 
@@ -135,7 +135,7 @@
 
 	.mobile-menu-btn,
 	.mobile-info-btn {
-		background: rgba(255, 255, 255, 0.85);
+		background: var(--bg-elevated);
 		border: none;
 		align-items: center;
 		width: 45px;
@@ -145,13 +145,13 @@
 		border-radius: 50%;
 		opacity: 1;
 		will-change: transform, opacity;
-		color: #707070;
-		transition: background-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+		color: var(--text-secondary);
+		transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
 	}
 
 	.mobile-menu-btn:active,
 	.mobile-info-btn:active {
-		background: #e0e0e0;
+		background: var(--active-bg);
 		transform: scale(0.93);
 	}	.settings-panel-card {
 		left: 2vw !important;
@@ -163,48 +163,48 @@
 }
 
 .member.private-chat-active {
-	background-color: #e0d0ff !important;
-	transition: background-color 0.2s ease;
+	background-color: var(--accent-100) !important;
+	transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 .member.private-chat-active:hover {
-	background-color: #d8c8f8 !important;
+	background-color: var(--accent-200) !important;
 }
 
 .chat-input-area.private-mode .chat-input-wrapper::before {
-	background-color: #f0e8ff !important;
-	transition: background-color 0.3s ease;
+	background-color: var(--accent-50) !important;
+	transition: background-color var(--duration-normal) var(--ease-out);
 }
 
 .bubble.other.private-message {
-	background-color: #9370db !important;
-	color: white !important;
+	background-color: var(--bubble-private) !important;
+	color: var(--bubble-private-text) !important;
 }
 
 .bubble.other.private-message .bubble-other-name {
-	color: #f0e8ff !important;
+	color: var(--accent-100) !important;
 }
 
 .bubble.other.private-message .bubble-meta {
-	color: #e0d0ff !important;
+	color: var(--accent-200) !important;
 }
 
 .bubble.other.private-message .bubble-content {
-	color: white !important;
+	color: var(--bubble-private-text) !important;
 	background-color: transparent !important;
 }
 
 .bubble.me.private-message {
-	background-color: #9370db !important;
-	color: white !important;
+	background-color: var(--bubble-private) !important;
+	color: var(--bubble-private-text) !important;
 }
 
 .bubble.me.private-message .bubble-meta {
-	color: #e0d0ff !important;
+	color: var(--accent-200) !important;
 }
 
 .bubble.me.private-message .bubble-content {
-	color: white !important;
+	color: var(--bubble-private-text) !important;
 	background-color: transparent !important;
 }
 

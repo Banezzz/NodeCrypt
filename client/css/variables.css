@@ -1,0 +1,268 @@
+/* ====== NodeCrypt Design System ====== */
+/* Tech-style design system - Black/White/Gray theme */
+/* 科技感设计系统 - 黑白灰主题 */
+
+:root {
+	/* === Base Color Palette / 基础色板 === */
+	/* Grayscale / 灰度 */
+	--gray-50: #fafafa;
+	--gray-100: #f5f5f5;
+	--gray-200: #e5e5e5;
+	--gray-300: #d4d4d4;
+	--gray-400: #a3a3a3;
+	--gray-500: #737373;
+	--gray-600: #525252;
+	--gray-700: #404040;
+	--gray-800: #262626;
+	--gray-900: #171717;
+	--gray-950: #0a0a0a;
+
+	/* Accent colors - Tech cyan/teal / 点缀色 - 科技感青蓝 */
+	--accent-50: #ecfeff;
+	--accent-100: #cffafe;
+	--accent-200: #a5f3fc;
+	--accent-300: #67e8f9;
+	--accent-400: #22d3ee;
+	--accent-500: #06b6d4;  /* Primary accent / 主点缀色 */
+	--accent-600: #0891b2;
+	--accent-700: #0e7490;
+	--accent-800: #155e75;
+	--accent-900: #164e63;
+
+	/* Status colors / 状态色 */
+	--success: #10b981;
+	--warning: #f59e0b;
+	--error: #ef4444;
+	--info: var(--accent-500);
+
+	/* === Semantic Variables - Light Mode / 语义化变量 - 亮色模式 === */
+	/* Backgrounds / 背景 */
+	--bg-primary: var(--gray-50);
+	--bg-secondary: #ffffff;
+	--bg-tertiary: var(--gray-100);
+	--bg-elevated: #ffffff;
+	--bg-overlay: rgba(0, 0, 0, 0.5);
+
+	/* Foreground/Text / 前景/文字 */
+	--text-primary: var(--gray-900);
+	--text-secondary: var(--gray-600);
+	--text-tertiary: var(--gray-500);
+	--text-muted: var(--gray-400);
+	--text-inverse: #ffffff;
+
+	/* Borders / 边框 */
+	--border-primary: var(--gray-200);
+	--border-secondary: var(--gray-300);
+	--border-focus: var(--accent-500);
+
+	/* Interactive states / 交互状态 */
+	--hover-bg: var(--gray-100);
+	--active-bg: var(--gray-200);
+	--focus-ring: rgba(6, 182, 212, 0.3);
+
+	/* Component specific / 组件特定 */
+	/* Message bubbles / 消息气泡 */
+	--bubble-me: var(--gray-800);
+	--bubble-me-text: #ffffff;
+	--bubble-other: #ffffff;
+	--bubble-other-text: var(--gray-900);
+	--bubble-system: var(--gray-100);
+	--bubble-system-text: var(--gray-600);
+	--bubble-private: var(--accent-700);
+	--bubble-private-text: #ffffff;
+
+	/* Sidebar / 侧边栏 */
+	--sidebar-bg: var(--gray-900);
+	--sidebar-text: var(--gray-100);
+	--sidebar-text-secondary: var(--gray-400);
+	--sidebar-hover: var(--gray-800);
+	--sidebar-active: var(--accent-600);
+	--sidebar-border: var(--gray-700);
+
+	/* Input fields / 输入框 */
+	--input-bg: #ffffff;
+	--input-border: var(--gray-300);
+	--input-text: var(--gray-900);
+	--input-placeholder: var(--gray-400);
+
+	/* Buttons / 按钮 */
+	--btn-primary-bg: var(--accent-500);
+	--btn-primary-text: #ffffff;
+	--btn-primary-hover: var(--accent-600);
+	--btn-secondary-bg: var(--gray-200);
+	--btn-secondary-text: var(--gray-800);
+	--btn-secondary-hover: var(--gray-300);
+
+	/* Scrollbars / 滚动条 */
+	--scrollbar-track: var(--gray-100);
+	--scrollbar-thumb: var(--gray-300);
+	--scrollbar-thumb-hover: var(--gray-400);
+
+	/* Shadows / 阴影 */
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+	--shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+	--shadow-glow: 0 0 20px rgba(6, 182, 212, 0.15);
+
+	/* Animation durations / 动画时长 */
+	--duration-fast: 150ms;
+	--duration-normal: 250ms;
+	--duration-slow: 400ms;
+
+	/* Easing functions / 缓动函数 */
+	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+	--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+	--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+	/* Layout / 布局 */
+	--sidebar-width: 250px;
+	--rightbar-width: 260px;
+	--header-height: 60px;
+	--input-area-height: 60px;
+}
+
+/* === Dark Mode / 暗色模式 === */
+[data-theme="dark"] {
+	/* Backgrounds / 背景 */
+	--bg-primary: var(--gray-950);
+	--bg-secondary: var(--gray-900);
+	--bg-tertiary: var(--gray-800);
+	--bg-elevated: var(--gray-800);
+	--bg-overlay: rgba(0, 0, 0, 0.7);
+
+	/* Foreground/Text / 前景/文字 */
+	--text-primary: var(--gray-50);
+	--text-secondary: var(--gray-300);
+	--text-tertiary: var(--gray-400);
+	--text-muted: var(--gray-500);
+	--text-inverse: var(--gray-900);
+
+	/* Borders / 边框 */
+	--border-primary: var(--gray-700);
+	--border-secondary: var(--gray-600);
+
+	/* Interactive states / 交互状态 */
+	--hover-bg: var(--gray-800);
+	--active-bg: var(--gray-700);
+
+	/* Component specific / 组件特定 */
+	/* Message bubbles / 消息气泡 */
+	--bubble-me: var(--accent-600);
+	--bubble-me-text: #ffffff;
+	--bubble-other: var(--gray-800);
+	--bubble-other-text: var(--gray-100);
+	--bubble-system: var(--gray-800);
+	--bubble-system-text: var(--gray-400);
+	--bubble-private: var(--accent-800);
+	--bubble-private-text: var(--accent-100);
+
+	/* Sidebar (stays dark in both modes) / 侧边栏（两种模式都保持深色） */
+	--sidebar-bg: var(--gray-950);
+	--sidebar-text: var(--gray-200);
+	--sidebar-text-secondary: var(--gray-500);
+	--sidebar-hover: var(--gray-800);
+	--sidebar-active: var(--accent-700);
+	--sidebar-border: var(--gray-800);
+
+	/* Input fields / 输入框 */
+	--input-bg: var(--gray-800);
+	--input-border: var(--gray-600);
+	--input-text: var(--gray-100);
+	--input-placeholder: var(--gray-500);
+
+	/* Buttons / 按钮 */
+	--btn-primary-bg: var(--accent-600);
+	--btn-primary-hover: var(--accent-500);
+	--btn-secondary-bg: var(--gray-700);
+	--btn-secondary-text: var(--gray-200);
+	--btn-secondary-hover: var(--gray-600);
+
+	/* Scrollbars / 滚动条 */
+	--scrollbar-track: var(--gray-800);
+	--scrollbar-thumb: var(--gray-600);
+	--scrollbar-thumb-hover: var(--gray-500);
+
+	/* Shadows - use glow effects in dark mode / 阴影 - 暗色模式使用发光效果 */
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+	--shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
+	--shadow-glow: 0 0 30px rgba(6, 182, 212, 0.2);
+}
+
+/* === Responsive Layout Variables / 响应式布局变量 === */
+@media (max-width: 768px) {
+	:root {
+		--sidebar-width: 100%;
+		--rightbar-width: 100%;
+	}
+}
+
+/* === Base Styles / 基础样式 === */
+* {
+	box-sizing: border-box;
+}
+
+/* Smooth transitions for theme changes / 主题切换平滑过渡 */
+body,
+.container,
+.sidebar,
+.main,
+.rightbar,
+.settings-sidebar,
+.bubble,
+.chat-input-area,
+input,
+button,
+select,
+textarea {
+	transition:
+		background-color var(--duration-normal) var(--ease-out),
+		color var(--duration-normal) var(--ease-out),
+		border-color var(--duration-normal) var(--ease-out),
+		box-shadow var(--duration-normal) var(--ease-out);
+}
+
+/* Custom scrollbar styling / 自定义滚动条样式 */
+::-webkit-scrollbar {
+	width: 8px;
+	height: 8px;
+}
+
+::-webkit-scrollbar-track {
+	background: var(--scrollbar-track);
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+	background: var(--scrollbar-thumb);
+	border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+	background: var(--scrollbar-thumb-hover);
+}
+
+/* Firefox scrollbar / Firefox 滚动条 */
+* {
+	scrollbar-width: thin;
+	scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+}
+
+/* Focus visible outline / 焦点可见轮廓 */
+:focus-visible {
+	outline: 2px solid var(--border-focus);
+	outline-offset: 2px;
+}
+
+/* Selection color / 选中颜色 */
+::selection {
+	background: var(--accent-200);
+	color: var(--gray-900);
+}
+
+[data-theme="dark"] ::selection {
+	background: var(--accent-700);
+	color: var(--gray-50);
+}

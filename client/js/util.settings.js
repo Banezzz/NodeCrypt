@@ -11,21 +11,51 @@ import {
 // 导入主题工具函数
 import { THEMES, applyTheme } from './util.theme.js';
 
+// Import color mode utilities
+// 导入颜色模式工具函数
+import { getCurrentColorMode, applyColorMode } from './util.colorMode.js';
+
 // Import i18n utilities
 // 导入国际化工具函数
 import { t, setLanguage, initI18n } from './util.i18n.js';
+
+// ============================================================================
+// Constants / 常量定义
+// ============================================================================
+
+// Scroll and drag interaction thresholds
+// 滚动和拖拽交互阈值
+const WHEEL_SCROLL_SENSITIVITY = 0.5;       // Mouse wheel scroll speed
+const MOUSE_SCROLL_MULTIPLIER = 2;          // Mouse drag scroll speed
+const MOUSE_DRAG_THRESHOLD = 5;             // Pixels moved to consider drag (px)
+const TOUCH_SCROLL_SENSITIVITY = 1.5;       // Touch scroll speed
+const TOUCH_SWIPE_THRESHOLD = 10;           // Pixels moved to consider swipe (px)
+const TOUCH_TAP_MAX_DURATION = 300;         // Max ms for touch tap
+const CLICK_MAX_DURATION = 200;             // Max ms for click
+
+// Notification settings
+// 通知设置
+const MAX_NOTIFY_TEXT_LEN = 100;            // Max notification text length
+const SOUND_FREQUENCY = 1000;               // Notification sound frequency (Hz)
+const SOUND_FADE_DURATION = 0.5;            // Sound fade out duration (s)
+const SOUND_END_GAIN = 0.0001;              // Sound end volume
+
 // Default settings
 // 默认设置
 const DEFAULT_SETTINGS = {
 	notify: false,
 	sound: false,
-	theme: 'theme1'
+	theme: 'theme1',
+	colorMode: null // null means follow system preference
 	// 注意：我们不设置默认语言，让系统自动检测浏览器语言
 	// Note: We don't set a default language, let the system auto-detect browser language
 };
 
-// Load settings from localStorage
-// 从 localStorage 加载设置
+/**
+ * Load settings from localStorage
+ * 从 localStorage 加载设置
+ * @returns {Object} Settings object with defaults applied
+ */
 function loadSettings() {
 	let s = localStorage.getItem('settings');
 	try {
@@ -39,33 +69,44 @@ function loadSettings() {
 	}
 }
 
-// Save settings to localStorage
-// 保存设置到 localStorage
+/**
+ * Save settings to localStorage
+ * 保存设置到 localStorage
+ * @param {Object} settings - Settings object to save
+ */
 function saveSettings(settings) {
 	const {
 		notify,
 		sound,
 		theme,
-		language
+		language,
+		colorMode
 	} = settings;
 	localStorage.setItem('settings', JSON.stringify({
 		notify,
 		sound,
 		theme,
-		language
+		language,
+		colorMode
 	}))
 }
 
-// Apply settings to the document
-// 应用设置到文档
+/**
+ * Apply settings to the document
+ * 应用设置到文档
+ * @param {Object} settings - Settings object to apply
+ */
 function applySettings(settings) {
 	// Initialize i18n with current language setting
 	// 根据当前语言设置初始化国际化
 	initI18n(settings);
 }
 
-// Ask for browser notification permission
-// 请求浏览器通知权限
+/**
+ * Ask for browser notification permission
+ * 请求浏览器通知权限
+ * @param {Function} callback - Callback with permission result ('granted', 'denied', 'default')
+ */
 function askNotificationPermission(callback) {
 	if (Notification.requestPermission.length === 0) {
 		Notification.requestPermission().then(callback)
@@ -74,8 +115,10 @@ function askNotificationPermission(callback) {
 	}
 }
 
-// Setup the settings panel UI
-// 设置设置面板 UI
+/**
+ * Setup the settings panel UI and event handlers
+ * 设置设置面板 UI 和事件处理器
+ */
 function setupSettingsPanel() {
 	const settingsSidebar = $id('settings-sidebar');
 	const settingsContent = $id('settings-content');
@@ -125,9 +168,23 @@ function setupSettingsPanel() {
 				</div>
 			</div>
 		</div>
-		
+
 		<div class="settings-section">
-			<div class="settings-section-title">${t('settings.theme', 'Theme Settings')}</div>
+			<div class="settings-section-title">${t('settings.appearance', 'Appearance')}</div>
+			<div class="settings-item">
+				<div class="settings-item-label">
+					<div>${t('settings.dark_mode', 'Dark Mode')}</div>
+					<div class="settings-item-description">${t('settings.dark_mode_desc', 'Toggle light/dark theme')}</div>
+				</div>
+				<label class="switch">
+					<input type="checkbox" id="settings-dark-mode" ${getCurrentColorMode() === 'dark' ? 'checked' : ''}>
+					<span class="slider"></span>
+				</label>
+			</div>
+		</div>
+
+		<div class="settings-section">
+			<div class="settings-section-title">${t('settings.background_theme', 'Background Theme')}</div>
 			<div class="theme-selector" id="theme-selector">
 				${THEMES.map(theme => `
 					<div class="theme-item ${settings.theme === theme.id ? 'active' : ''}" data-theme-id="${theme.id}" style="background: ${theme.background}; background-size: cover; background-position: center;">
@@ -138,7 +195,17 @@ function setupSettingsPanel() {
 	`;	const notifyCheckbox = $('#settings-notify', settingsContent);
 	const soundCheckbox = $('#settings-sound', settingsContent);
 	const languageSelect = $('#settings-language', settingsContent);
-	
+	const darkModeCheckbox = $('#settings-dark-mode', settingsContent);
+
+	// Dark mode toggle event handler
+	// 深色模式切换事件处理
+	on(darkModeCheckbox, 'change', e => {
+		const newMode = e.target.checked ? 'dark' : 'light';
+		settings.colorMode = newMode;
+		applyColorMode(newMode);
+		saveSettings(settings);
+	});
+
 	// Language select event handler
 	// 语言选择事件处理
 	on(languageSelect, 'change', e => {
@@ -211,6 +278,30 @@ function setupSettingsPanel() {
 	// 主题选择事件处理
 	const themeSelector = $('#theme-selector', settingsContent);
 	if (themeSelector) {
+		/**
+		 * Apply theme selection - shared logic for click and touch events
+		 * 应用主题选择 - click 和 touch 事件的共用逻辑
+		 * @param {Event} e - The event object
+		 */
+		const selectThemeItem = (e) => {
+			const themeItem = e.target.closest('.theme-item');
+			if (themeItem) {
+				const themeId = themeItem.dataset.themeId;
+				if (themeId && themeId !== settings.theme) {
+					// Update active state
+					$$('.theme-item', themeSelector).forEach(item => {
+						item.classList.remove('active');
+					});
+					themeItem.classList.add('active');
+
+					// Apply theme and save settings
+					settings.theme = themeId;
+					applyTheme(themeId);
+					saveSettings(settings);
+				}
+			}
+		};
+
 		// Custom scrolling functionality
 		// 自定义滚动功能
 		let isDragging = false;
@@ -221,7 +312,7 @@ function setupSettingsPanel() {
 		// 鼠标滚轮滚动（垂直转水平）
 		on(themeSelector, 'wheel', e => {
 			e.preventDefault();
-			const scrollAmount = e.deltaY * 0.5; // Adjust scroll sensitivity
+			const scrollAmount = e.deltaY * WHEEL_SCROLL_SENSITIVITY;
 			themeSelector.scrollLeft += scrollAmount;
 		});
 		// Mouse drag scrolling
@@ -242,11 +333,11 @@ function setupSettingsPanel() {
 			if (!isDragging) return;
 			e.preventDefault();
 			const x = e.pageX - themeSelector.offsetLeft;
-			const walk = (x - startX) * 2; // Scroll speed multiplier
+			const walk = (x - startX) * MOUSE_SCROLL_MULTIPLIER;
 			const moved = Math.abs(walk);
-			
-			// If moved more than 5px, consider it a drag
-			if (moved > 5) {
+
+			// If moved more than threshold, consider it a drag
+			if (moved > MOUSE_DRAG_THRESHOLD) {
 				hasDragged = true;
 			}
 			
@@ -276,10 +367,10 @@ function setupSettingsPanel() {
 		on(themeSelector, 'touchmove', e => {
 			e.preventDefault();
 			const touchX = e.touches[0].clientX;
-			const walk = (touchStartX - touchX) * 1.5; // Touch scroll sensitivity
-			
-			// If moved more than 10px, consider it a swipe
-			if (Math.abs(walk) > 10) {
+			const walk = (touchStartX - touchX) * TOUCH_SCROLL_SENSITIVITY;
+
+			// If moved more than threshold, consider it a swipe
+			if (Math.abs(walk) > TOUCH_SWIPE_THRESHOLD) {
 				touchHasMoved = true;
 			}
 			
@@ -295,30 +386,15 @@ function setupSettingsPanel() {
 				touchHasMoved = false;
 				return;
 			}
-			
+
 			// Check if it was a quick tap
 			// 检查是否是快速点击
 			const tapDuration = Date.now() - touchStartTime;
-			if (tapDuration > 300) {
+			if (tapDuration > TOUCH_TAP_MAX_DURATION) {
 				return;
 			}
-			
-			const themeItem = e.target.closest('.theme-item');
-			if (themeItem) {
-				const themeId = themeItem.dataset.themeId;
-				if (themeId && themeId !== settings.theme) {
-					// Update active state
-					$$('.theme-item', themeSelector).forEach(item => {
-						item.classList.remove('active');
-					});
-					themeItem.classList.add('active');
-					
-					// Apply theme and save settings
-					settings.theme = themeId;
-					applyTheme(themeId);
-					saveSettings(settings);
-				}
-			}
+
+			selectThemeItem(e);
 		});
 		// Theme selection click handler
 		// 主题选择点击处理器
@@ -329,41 +405,32 @@ function setupSettingsPanel() {
 				hasDragged = false;
 				return;
 			}
-			
-			// Also check if it was a quick click (less than 200ms and minimal movement)
-			// 同时检查是否是快速点击（少于200ms且移动很少）
+
+			// Also check if it was a quick click
+			// 同时检查是否是快速点击
 			const clickDuration = Date.now() - dragStartTime;
-			if (clickDuration > 200) {
+			if (clickDuration > CLICK_MAX_DURATION) {
 				return;
 			}
-			
-			const themeItem = e.target.closest('.theme-item');
-			if (themeItem) {
-				const themeId = themeItem.dataset.themeId;
-				if (themeId && themeId !== settings.theme) {
-					// Update active state
-					$$('.theme-item', themeSelector).forEach(item => {
-						item.classList.remove('active');
-					});
-					themeItem.classList.add('active');
-					
-					// Apply theme and save settings
-					settings.theme = themeId;
-					applyTheme(themeId);
-					saveSettings(settings);
-				}
-			}
+
+			selectThemeItem(e);
 		});
 	}
 }
 
-// Check if device is mobile
+/**
+ * Check if device is mobile based on viewport width
+ * 根据视口宽度检查是否为移动设备
+ * @returns {boolean} True if viewport width <= 768px
+ */
 function isMobile() {
 	return window.innerWidth <= 768;
 }
 
-// Open the settings panel
-// 打开设置面板
+/**
+ * Open the settings panel with animation
+ * 打开设置面板（带动画）
+ */
 function openSettingsPanel() {
 	const settingsSidebar = $id('settings-sidebar');
 	const sidebar = $id('sidebar');
@@ -393,8 +460,10 @@ function openSettingsPanel() {
 	setupSettingsPanel();
 }
 
-// Close the settings panel
-// 关闭设置面板
+/**
+ * Close the settings panel with animation
+ * 关闭设置面板（带动画）
+ */
 function closeSettingsPanel() {
 	const settingsSidebar = $id('settings-sidebar');
 	const sidebarMask = $id('mobile-sidebar-mask'); // mobile-sidebar-mask is used for settings on mobile
@@ -432,8 +501,10 @@ function closeSettingsPanel() {
 	}
 }
 
-// Initialize settings on page load
-// 页面加载时初始化设置
+/**
+ * Initialize settings on page load
+ * 页面加载时初始化设置
+ */
 function initSettings() {
 	const settings = loadSettings();
 	applySettings(settings);
@@ -456,39 +527,47 @@ function initSettings() {
 	});
 }
 
-// Maximum notification text length
-// 通知文本最大长度
-const MAX_NOTIFY_TEXT_LEN = 100;
-
-// Truncate text for notifications
-// 截断通知文本
+/**
+ * Truncate text for notifications
+ * 截断通知文本
+ * @param {string} text - Text to truncate
+ * @returns {string} Truncated text with ellipsis if needed
+ */
 function truncateText(text) {
-	return text.length > MAX_NOTIFY_TEXT_LEN ? text.slice(0, MAX_NOTIFY_TEXT_LEN) + '...' : text
+	return text.length > MAX_NOTIFY_TEXT_LEN ? text.slice(0, MAX_NOTIFY_TEXT_LEN) + '...' : text;
 }
 
-// Play sound notification
-// 播放声音通知
+/**
+ * Play a sound notification using Web Audio API
+ * 使用 Web Audio API 播放声音通知
+ */
 function playSoundNotification() {
 	try {
-		const ctx = new(window.AudioContext || window.webkitAudioContext)();
+		const ctx = new (window.AudioContext || window.webkitAudioContext)();
 		const osc = ctx.createOscillator();
 		const gain = ctx.createGain();
-		osc.frequency.value = 1000;
+		osc.frequency.value = SOUND_FREQUENCY;
 		osc.connect(gain);
 		gain.connect(ctx.destination);
 		osc.start();
-		gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.5);
+		gain.gain.exponentialRampToValueAtTime(SOUND_END_GAIN, ctx.currentTime + SOUND_FADE_DURATION);
 		setTimeout(() => {
 			osc.stop();
-			ctx.close()
-		}, 600)
+			ctx.close();
+		}, (SOUND_FADE_DURATION + 0.1) * 1000);
 	} catch (e) {
-		console.error('Sound notification failed', e)
+		console.error('Sound notification failed', e);
 	}
 }
 
-// Show desktop notification
-// 显示桌面通知
+/**
+ * Show desktop notification
+ * 显示桌面通知
+ * @param {string} roomName - Room name to display
+ * @param {string} text - Notification text content
+ * @param {string} msgType - Message type ('text', 'image', 'private text', 'private image')
+ * @param {string} sender - Sender name
+ */
 function showDesktopNotification(roomName, text, msgType, sender) {
 	if (!('Notification' in window) || Notification.permission !== 'granted') return;
 	let body;
@@ -510,8 +589,14 @@ function showDesktopNotification(roomName, text, msgType, sender) {
 	})
 }
 
-// Notify message entry point
-// 通知消息主入口
+/**
+ * Notify message entry point - shows desktop or sound notification based on settings
+ * 通知消息主入口 - 根据设置显示桌面通知或声音通知
+ * @param {string} roomName - Room name
+ * @param {string} msgType - Message type ('text', 'image', 'private text', 'private image')
+ * @param {string} text - Message text content
+ * @param {string} sender - Sender name
+ */
 export function notifyMessage(roomName, msgType, text, sender) {
 	const settings = loadSettings();
 	if (settings.notify) {
