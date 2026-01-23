@@ -1,4 +1,8 @@
-@media (max-width:768px) {
+/* ====== NodeCrypt Mobile Responsive Styles ====== */
+/* Mobile-first responsive design */
+/* 移动端响应式设计 */
+
+@media (max-width: 768px) {
 
 	html,
 	body {
@@ -51,7 +55,7 @@
 		box-sizing: border-box;
 		background: none;
 		margin: 0;
-		padding: 16px 4px 88px 4px;
+		padding: 16px 8px 88px 8px;
 	}
 
 	.chat-input-area {
@@ -64,24 +68,32 @@
 		min-width: 0;
 		box-sizing: border-box;
 		margin: 0;
-		padding: 5px 15px calc(10px + env(safe-area-inset-bottom)) 10px;
+		padding: 8px 12px calc(12px + env(safe-area-inset-bottom)) 12px;
 		z-index: 1200;
+		background: var(--bg-primary);
+		border-top: 1px solid var(--border-primary);
+	}
+
+	.chat-input-wrapper {
+		width: 100%;
 	}
 
 	* {
 		touch-action: pan-y;
-	}	
+	}
+
 	.sidebar,
 	.rightbar,
 	.settings-sidebar {
 		position: fixed;
 		top: 0;
-		width: 60vw !important;
+		width: 75vw !important;
+		max-width: 300px;
 		bottom: 0;
 		z-index: 1000;
 		height: 100dvh;
 		background: var(--bg-secondary);
-		box-shadow: var(--shadow-lg);
+		box-shadow: var(--shadow-xl);
 		transition: transform var(--duration-normal) var(--ease-out), background-color var(--duration-normal) var(--ease-out);
 	}
 
@@ -89,6 +101,7 @@
 		left: 0;
 		transform: translateX(-100%);
 		border-right: 1px solid var(--border-primary);
+		background: var(--sidebar-bg);
 	}
 
 	.sidebar.mobile-open {
@@ -98,7 +111,7 @@
 	.settings-sidebar {
 		transform: translateX(-100%);
 		border-right: 1px solid var(--border-primary);
-		z-index: 1001; /* Higher than normal sidebar */
+		z-index: 1001;
 	}
 
 	.settings-sidebar.mobile-open {
@@ -107,7 +120,7 @@
 
 	.rightbar {
 		right: 0;
-		max-width: 70vw;
+		max-width: 80vw;
 		transform: translateX(100%);
 		border-left: 1px solid var(--border-primary);
 	}
@@ -126,6 +139,7 @@
 		bottom: 0;
 		background: var(--bg-overlay);
 		z-index: 999;
+		backdrop-filter: blur(4px);
 	}
 
 	.mobile-sidebar-mask.active,
@@ -136,34 +150,64 @@
 	.mobile-menu-btn,
 	.mobile-info-btn {
 		background: var(--bg-elevated);
-		border: none;
+		border: 1px solid var(--border-primary);
 		align-items: center;
-		width: 45px;
-		height: 45px;
+		width: 42px;
+		height: 42px;
 		z-index: 1100;
 		cursor: pointer;
-		border-radius: 50%;
+		border-radius: 10px;
 		opacity: 1;
 		will-change: transform, opacity;
 		color: var(--text-secondary);
-		transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+		transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out), border-color var(--duration-fast) var(--ease-out);
+	}
+
+	.mobile-menu-btn:hover,
+	.mobile-info-btn:hover {
+		border-color: var(--accent-500);
+		color: var(--accent-500);
 	}
 
 	.mobile-menu-btn:active,
 	.mobile-info-btn:active {
 		background: var(--active-bg);
-		transform: scale(0.93);
-	}	.settings-panel-card {
+		transform: scale(0.95);
+	}
+
+	.settings-panel-card {
 		left: 2vw !important;
 	}
-	
+
 	.flip-card {
-	width: 95%;
-}
+		width: 95%;
+		max-width: 380px;
+	}
+
+	/* Mobile bubble adjustments */
+	.bubble {
+		max-width: 85%;
+	}
+
+	.bubble.me,
+	.bubble.other {
+		font-size: 14px;
+	}
+
+	/* Mobile header adjustments */
+	.main-header {
+		padding: 12px 14px;
+	}
+
+	.main-header .group-title {
+		font-size: 15px;
+	}
 }
 
+/* === Private Chat Styles / 私聊样式 === */
 .member.private-chat-active {
 	background-color: var(--accent-100) !important;
+	border: 1px solid var(--accent-300);
 	transition: background-color var(--duration-fast) var(--ease-out);
 }
 
@@ -171,14 +215,41 @@
 	background-color: var(--accent-200) !important;
 }
 
-.chat-input-area.private-mode .chat-input-wrapper::before {
-	background-color: var(--accent-50) !important;
-	transition: background-color var(--duration-normal) var(--ease-out);
+[data-theme="dark"] .member.private-chat-active {
+	background-color: rgba(249, 115, 22, 0.15) !important;
+	border-color: rgba(249, 115, 22, 0.3);
 }
 
+[data-theme="dark"] .member.private-chat-active:hover {
+	background-color: rgba(249, 115, 22, 0.25) !important;
+}
+
+/* Private mode input area / 私聊模式输入区 */
+.chat-input-area.private-mode .chat-input-wrapper::before {
+	background-color: var(--accent-50) !important;
+	border-color: var(--accent-300) !important;
+	transition: background-color var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
+}
+
+[data-theme="dark"] .chat-input-area.private-mode .chat-input-wrapper::before {
+	background-color: rgba(249, 115, 22, 0.1) !important;
+	border-color: var(--accent-600) !important;
+}
+
+/* Private mode input text - ensure visibility / 私聊模式输入文字 - 确保可见性 */
+.chat-input-area.private-mode .input-message-input {
+	color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .chat-input-area.private-mode .input-message-input {
+	color: var(--gray-100) !important;
+}
+
+/* Private message bubbles / 私聊消息气泡 */
 .bubble.other.private-message {
 	background-color: var(--bubble-private) !important;
 	color: var(--bubble-private-text) !important;
+	border: none;
 }
 
 .bubble.other.private-message .bubble-other-name {
@@ -208,15 +279,12 @@
 	background-color: transparent !important;
 }
 
-/* Mobile theme selector styles */
-/* 移动端主题选择器样式 */
+/* === Theme Selector Mobile Styles / 主题选择器移动端样式 === */
 .theme-selector {
 	gap: 8px;
-	padding: 6px 2px;
-	/* Ensure scrollbars are hidden on mobile too */
+	padding: 8px 4px;
 	scrollbar-width: none;
 	-ms-overflow-style: none;
-	/* Improve touch scrolling */
 	-webkit-overflow-scrolling: touch;
 }
 
@@ -225,13 +293,82 @@
 }
 
 .theme-item {
-	width: 70px;
-	height: 70px;
-	/* Prevent text selection on mobile */
+	width: 64px;
+	height: 64px;
 	-webkit-user-select: none;
 	-moz-user-select: none;
 	-ms-user-select: none;
 	user-select: none;
-	/* Prevent touch callouts */
 	-webkit-touch-callout: none;
+}
+
+/* === Screenshot Protection Styles / 截图保护样式 === */
+/* Note: True screenshot prevention is not possible with CSS alone */
+/* These styles add visual deterrents and make content harder to capture */
+
+.screenshot-protection {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-touch-callout: none;
+}
+
+/* Private chat screenshot warning overlay */
+.private-mode-indicator {
+	display: none;
+}
+
+.chat-input-area.private-mode .private-mode-indicator {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	font-size: 11px;
+	color: var(--accent-500);
+	font-family: var(--font-mono);
+	padding: 4px 10px;
+	background: var(--accent-50);
+	border-radius: 6px;
+	border: 1px solid var(--accent-200);
+	margin-bottom: 8px;
+}
+
+[data-theme="dark"] .chat-input-area.private-mode .private-mode-indicator {
+	background: rgba(249, 115, 22, 0.1);
+	border-color: rgba(249, 115, 22, 0.3);
+}
+
+.private-mode-indicator::before {
+	content: '';
+	width: 6px;
+	height: 6px;
+	background: var(--accent-500);
+	border-radius: 50%;
+	animation: status-online 2s ease-in-out infinite;
+}
+
+/* Small screen additional adjustments */
+@media (max-width: 480px) {
+	.flip-card {
+		width: 98%;
+		height: 480px;
+	}
+
+	.flip-card-front,
+	.flip-card-back {
+		padding: 32px 18px 20px 18px;
+	}
+
+	.login-container h1 {
+		font-size: 1.75rem;
+	}
+
+	.chat-input-wrapper {
+		width: 100%;
+	}
+
+	.sidebar,
+	.rightbar {
+		width: 85vw !important;
+	}
 }

@@ -1,27 +1,66 @@
+/* ====== NodeCrypt Form Animations ====== */
+/* Floating label & input animations */
+/* 浮动标签与输入框动画 */
+
 /* 浮动标签动画样式 */
 .input-group {
-  position: relative;
+	position: relative;
 }
 
 .input-group .floating-label {
-  position: absolute;
-  top: 14px;
-  left: 16px;
-  pointer-events: none;
-  font-size: 1.1rem;
-  color: #888;
-  transition: 0.25s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	position: absolute;
+	top: 14px;
+	left: 16px;
+	pointer-events: none;
+	font-size: 1rem;
+	color: var(--input-placeholder);
+	transition: all 0.25s var(--ease-spring);
+	font-family: var(--font-sans);
 }
 
 .input-group input:focus + .floating-label,
 .input-group input:not(:placeholder-shown) + .floating-label {
-  color: #30a8f7;
-  transform: translateY(-40px);
+	color: var(--accent-500);
+	transform: translateY(-42px) scale(0.85);
+	font-weight: 500;
 }
 
 .input-group .floating-label span {
-  display: inline;
-  color: inherit;
-  transition: none;
-  min-width: 0;
+	display: inline;
+	color: inherit;
+	transition: none;
+	min-width: 0;
+}
+
+/* Input focus underline effect / 输入框焦点下划线效果 */
+.input-group.with-underline {
+	position: relative;
+}
+
+.input-group.with-underline::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	width: 0;
+	height: 2px;
+	background: var(--accent-500);
+	transition: all var(--duration-normal) var(--ease-out);
+	transform: translateX(-50%);
+}
+
+.input-group.with-underline:focus-within::after {
+	width: 100%;
+}
+
+/* Geek-style input glow / 极客风格输入框发光 */
+.input-geek-glow {
+	position: relative;
+}
+
+.input-geek-glow input:focus {
+	border-color: var(--accent-500);
+	box-shadow:
+		0 0 0 3px var(--focus-ring),
+		0 0 20px rgba(249, 115, 22, 0.1);
 }

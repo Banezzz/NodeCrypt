@@ -1,5 +1,6 @@
 /* ====== NodeCrypt Animation System ====== */
-/* 动画系统 */
+/* Geek-style animations - Professional & Minimalist */
+/* 极客风格动画系统 - 专业、简约 */
 
 /* === Entrance Animations / 入场动画 === */
 @keyframes fade-in {
@@ -10,7 +11,7 @@
 @keyframes fade-in-up {
 	from {
 		opacity: 0;
-		transform: translateY(10px);
+		transform: translateY(12px);
 	}
 	to {
 		opacity: 1;
@@ -21,7 +22,7 @@
 @keyframes fade-in-down {
 	from {
 		opacity: 0;
-		transform: translateY(-10px);
+		transform: translateY(-12px);
 	}
 	to {
 		opacity: 1;
@@ -32,7 +33,7 @@
 @keyframes fade-in-scale {
 	from {
 		opacity: 0;
-		transform: scale(0.95);
+		transform: scale(0.96);
 	}
 	to {
 		opacity: 1;
@@ -43,7 +44,7 @@
 @keyframes slide-in-left {
 	from {
 		opacity: 0;
-		transform: translateX(-20px);
+		transform: translateX(-24px);
 	}
 	to {
 		opacity: 1;
@@ -54,7 +55,7 @@
 @keyframes slide-in-right {
 	from {
 		opacity: 0;
-		transform: translateX(20px);
+		transform: translateX(24px);
 	}
 	to {
 		opacity: 1;
@@ -80,7 +81,7 @@
 	}
 }
 
-/* === Pulse/Glow Animations / 脉冲/发光动画 === */
+/* === Geek-style Glow Animations / 极客风格发光动画 === */
 @keyframes pulse {
 	0%, 100% { opacity: 1; }
 	50% { opacity: 0.7; }
@@ -88,17 +89,51 @@
 
 @keyframes pulse-scale {
 	0%, 100% { transform: scale(1); }
-	50% { transform: scale(1.05); }
+	50% { transform: scale(1.03); }
 }
 
 @keyframes glow-pulse {
-	0%, 100% { box-shadow: 0 0 5px var(--accent-500); }
-	50% { box-shadow: 0 0 20px var(--accent-500); }
+	0%, 100% {
+		box-shadow: 0 0 5px var(--accent-500),
+					0 0 10px rgba(249, 115, 22, 0.1);
+	}
+	50% {
+		box-shadow: 0 0 15px var(--accent-500),
+					0 0 30px rgba(249, 115, 22, 0.2);
+	}
 }
 
 @keyframes border-glow {
-	0%, 100% { border-color: var(--accent-500); }
-	50% { border-color: var(--accent-400); }
+	0%, 100% {
+		border-color: var(--accent-500);
+		box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.1);
+	}
+	50% {
+		border-color: var(--accent-400);
+		box-shadow: 0 0 0 2px rgba(249, 115, 22, 0.15);
+	}
+}
+
+/* Terminal-style cursor blink / 终端风格光标闪烁 */
+@keyframes cursor-blink {
+	0%, 50% { opacity: 1; }
+	51%, 100% { opacity: 0; }
+}
+
+/* Subtle scan line effect / 微妙扫描线效果 */
+@keyframes scan-line {
+	0% { transform: translateY(-100%); }
+	100% { transform: translateY(100vh); }
+}
+
+/* Orange accent glow / 橙色点缀发光 */
+@keyframes accent-glow {
+	0%, 100% {
+		filter: drop-shadow(0 0 2px var(--accent-500));
+	}
+	50% {
+		filter: drop-shadow(0 0 8px var(--accent-400));
+	}
 }
 
 /* === Skeleton/Loading Animations / 骨架屏/加载动画 === */
@@ -114,20 +149,39 @@
 
 @keyframes bounce {
 	0%, 100% { transform: translateY(0); }
-	50% { transform: translateY(-5px); }
+	50% { transform: translateY(-4px); }
+}
+
+/* Data loading effect / 数据加载效果 */
+@keyframes data-flow {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
 
 /* === Typing Indicator / 打字指示器 === */
 @keyframes typing-dot {
-	0%, 60%, 100% { transform: translateY(0); }
-	30% { transform: translateY(-4px); }
+	0%, 60%, 100% {
+		transform: translateY(0);
+		opacity: 0.4;
+	}
+	30% {
+		transform: translateY(-3px);
+		opacity: 1;
+	}
 }
 
 /* === Message Bubble Animation / 消息气泡动画 === */
 @keyframes bubble-in {
 	from {
 		opacity: 0;
-		transform: translateY(10px) scale(0.95);
+		transform: translateY(8px) scale(0.97);
 	}
 	to {
 		opacity: 1;
@@ -138,7 +192,7 @@
 @keyframes bubble-in-left {
 	from {
 		opacity: 0;
-		transform: translateX(-10px) scale(0.95);
+		transform: translateX(-8px) scale(0.97);
 	}
 	to {
 		opacity: 1;
@@ -149,7 +203,7 @@
 @keyframes bubble-in-right {
 	from {
 		opacity: 0;
-		transform: translateX(10px) scale(0.95);
+		transform: translateX(8px) scale(0.97);
 	}
 	to {
 		opacity: 1;
@@ -170,7 +224,7 @@
 	}
 	to {
 		opacity: 0;
-		transform: translateY(10px);
+		transform: translateY(8px);
 	}
 }
 
@@ -181,7 +235,7 @@
 	}
 	to {
 		opacity: 0;
-		transform: scale(0.95);
+		transform: scale(0.96);
 	}
 }
 
@@ -219,7 +273,7 @@
 }
 
 .animate-glow {
-	animation: glow-pulse 2s ease-in-out infinite;
+	animation: glow-pulse 2.5s ease-in-out infinite;
 }
 
 .animate-spin {
@@ -227,15 +281,15 @@
 }
 
 .animate-bounce {
-	animation: bounce 1s ease-in-out infinite;
+	animation: bounce 1.2s ease-in-out infinite;
 }
 
 /* === Transition Utility Classes / 过渡工具类 === */
 .transition-colors {
 	transition:
-		color var(--duration-fast) var(--ease-out),
-		background-color var(--duration-fast) var(--ease-out),
-		border-color var(--duration-fast) var(--ease-out);
+		color var(--duration-fast) var(--ease-smooth),
+		background-color var(--duration-fast) var(--ease-smooth),
+		border-color var(--duration-fast) var(--ease-smooth);
 }
 
 .transition-transform {
@@ -243,19 +297,21 @@
 }
 
 .transition-opacity {
-	transition: opacity var(--duration-fast) var(--ease-out);
+	transition: opacity var(--duration-fast) var(--ease-smooth);
 }
 
 .transition-shadow {
-	transition: box-shadow var(--duration-fast) var(--ease-out);
+	transition: box-shadow var(--duration-fast) var(--ease-smooth);
 }
 
 .transition-all {
-	transition: all var(--duration-fast) var(--ease-out);
+	transition: all var(--duration-fast) var(--ease-smooth);
 }
 
 /* === Delay Classes / 延迟类 === */
+.delay-75 { animation-delay: 75ms; }
 .delay-100 { animation-delay: 100ms; }
+.delay-150 { animation-delay: 150ms; }
 .delay-200 { animation-delay: 200ms; }
 .delay-300 { animation-delay: 300ms; }
 .delay-400 { animation-delay: 400ms; }
@@ -270,26 +326,27 @@
 .typing-indicator {
 	display: inline-flex;
 	align-items: center;
-	gap: 4px;
-	padding: 8px 12px;
+	gap: 5px;
+	padding: 10px 14px;
 	background: var(--bg-tertiary);
 	border-radius: 16px;
+	border: 1px solid var(--border-primary);
 }
 
 .typing-indicator .dot {
-	width: 6px;
-	height: 6px;
-	background: var(--text-muted);
+	width: 5px;
+	height: 5px;
+	background: var(--accent-500);
 	border-radius: 50%;
 	animation: typing-dot 1.4s ease-in-out infinite;
 }
 
 .typing-indicator .dot:nth-child(2) {
-	animation-delay: 0.2s;
+	animation-delay: 0.15s;
 }
 
 .typing-indicator .dot:nth-child(3) {
-	animation-delay: 0.4s;
+	animation-delay: 0.3s;
 }
 
 /* === Skeleton Loading Component / 骨架屏加载组件 === */
@@ -308,9 +365,9 @@
 [data-theme="dark"] .skeleton {
 	background: linear-gradient(
 		90deg,
-		var(--gray-700) 25%,
-		var(--gray-600) 50%,
-		var(--gray-700) 75%
+		var(--gray-800) 25%,
+		var(--gray-700) 50%,
+		var(--gray-800) 75%
 	);
 	background-size: 200% 100%;
 }
@@ -346,11 +403,13 @@
 
 /* === Hover Animation Enhancements / 悬停动画增强 === */
 .hover-lift {
-	transition: transform var(--duration-fast) var(--ease-out);
+	transition: transform var(--duration-fast) var(--ease-out),
+				box-shadow var(--duration-fast) var(--ease-out);
 }
 
 .hover-lift:hover {
 	transform: translateY(-2px);
+	box-shadow: var(--shadow-md);
 }
 
 .hover-scale {
@@ -362,7 +421,7 @@
 }
 
 .hover-glow {
-	transition: box-shadow var(--duration-fast) var(--ease-out);
+	transition: box-shadow var(--duration-normal) var(--ease-out);
 }
 
 .hover-glow:hover {
@@ -387,14 +446,15 @@
 /* === Notification Badge Animation / 通知徽章动画 === */
 @keyframes badge-pop {
 	0% {
-		transform: scale(0);
+		transform: scale(0.3) translateY(-50%);
 		opacity: 0;
 	}
-	50% {
-		transform: scale(1.2);
+	60% {
+		transform: scale(1.1) translateY(-50%);
+		opacity: 1;
 	}
 	100% {
-		transform: scale(1);
+		transform: scale(1) translateY(-50%);
 		opacity: 1;
 	}
 }
@@ -414,7 +474,7 @@
 
 /* === Modal Animations / 模态框动画 === */
 .modal-backdrop-enter {
-	animation: fade-in var(--duration-normal) var(--ease-out);
+	animation: fade-in var(--duration-normal) var(--ease-smooth);
 }
 
 .modal-content-enter {
@@ -422,9 +482,132 @@
 }
 
 .modal-backdrop-exit {
-	animation: fade-out var(--duration-fast) var(--ease-out);
+	animation: fade-out var(--duration-fast) var(--ease-smooth);
 }
 
 .modal-content-exit {
-	animation: scale-out var(--duration-fast) var(--ease-out);
+	animation: scale-out var(--duration-fast) var(--ease-smooth);
+}
+
+/* === Geek-style Special Effects / 极客风格特效 === */
+
+/* Terminal cursor effect for inputs / 输入框终端光标效果 */
+.terminal-cursor::after {
+	content: '|';
+	animation: cursor-blink 1s step-end infinite;
+	color: var(--accent-500);
+	font-weight: 400;
+}
+
+/* Orange line animation / 橙色线条动画 */
+@keyframes line-expand {
+	from {
+		transform: scaleX(0);
+		opacity: 0;
+	}
+	to {
+		transform: scaleX(1);
+		opacity: 1;
+	}
+}
+
+.line-animate {
+	transform-origin: left center;
+	animation: line-expand var(--duration-slow) var(--ease-out);
+}
+
+/* Staggered entrance for list items / 列表项交错入场 */
+.stagger-enter > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-enter > *:nth-child(2) { animation-delay: 50ms; }
+.stagger-enter > *:nth-child(3) { animation-delay: 100ms; }
+.stagger-enter > *:nth-child(4) { animation-delay: 150ms; }
+.stagger-enter > *:nth-child(5) { animation-delay: 200ms; }
+.stagger-enter > *:nth-child(6) { animation-delay: 250ms; }
+.stagger-enter > *:nth-child(7) { animation-delay: 300ms; }
+.stagger-enter > *:nth-child(8) { animation-delay: 350ms; }
+
+/* Secure lock icon animation / 安全锁图标动画 */
+@keyframes secure-pulse {
+	0%, 100% {
+		transform: scale(1);
+		filter: drop-shadow(0 0 2px var(--accent-500));
+	}
+	50% {
+		transform: scale(1.05);
+		filter: drop-shadow(0 0 6px var(--accent-400));
+	}
+}
+
+.secure-icon {
+	animation: secure-pulse 3s ease-in-out infinite;
+}
+
+/* === Button Press Effect / 按钮按压效果 === */
+@keyframes button-press {
+	0% { transform: scale(1); }
+	50% { transform: scale(0.97); }
+	100% { transform: scale(1); }
+}
+
+.btn-press:active {
+	animation: button-press var(--duration-fast) var(--ease-out);
+}
+
+/* === Ripple Effect / 涟漪效果 === */
+@keyframes ripple {
+	0% {
+		transform: scale(0);
+		opacity: 0.5;
+	}
+	100% {
+		transform: scale(4);
+		opacity: 0;
+	}
+}
+
+.ripple-effect {
+	position: relative;
+	overflow: hidden;
+}
+
+.ripple-effect::after {
+	content: '';
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	top: 50%;
+	left: 50%;
+	pointer-events: none;
+	background: radial-gradient(circle, var(--accent-500) 0%, transparent 70%);
+	transform: translate(-50%, -50%) scale(0);
+	opacity: 0;
+}
+
+.ripple-effect:active::after {
+	animation: ripple var(--duration-slow) var(--ease-out);
+}
+
+/* === Connection Status Animation / 连接状态动画 === */
+@keyframes status-online {
+	0%, 100% {
+		box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.4);
+	}
+	50% {
+		box-shadow: 0 0 0 4px rgba(34, 197, 94, 0);
+	}
+}
+
+.status-indicator.online {
+	background: var(--success);
+	animation: status-online 2s ease-in-out infinite;
+}
+
+/* === Encryption Animation / 加密动画 === */
+@keyframes encrypt-flash {
+	0%, 100% { opacity: 1; }
+	50% { opacity: 0.6; }
+}
+
+.encrypting {
+	animation: encrypt-flash 0.3s ease-in-out 3;
 }

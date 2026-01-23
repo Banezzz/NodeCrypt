@@ -1,47 +1,50 @@
 /* ====== NodeCrypt Design System ====== */
-/* Tech-style design system - Black/White/Gray theme */
-/* 科技感设计系统 - 黑白灰主题 */
+/* Geek-style design system - Orange + Black/White/Gray theme */
+/* 极客风格设计系统 - 橙色 + 黑白灰主题 */
+/* Privacy-focused | Minimalist | Professional */
+
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
 
 :root {
 	/* === Base Color Palette / 基础色板 === */
-	/* Grayscale / 灰度 */
+	/* Grayscale / 灰度 - 精细的灰度阶梯 */
 	--gray-50: #fafafa;
-	--gray-100: #f5f5f5;
-	--gray-200: #e5e5e5;
-	--gray-300: #d4d4d4;
-	--gray-400: #a3a3a3;
-	--gray-500: #737373;
-	--gray-600: #525252;
-	--gray-700: #404040;
-	--gray-800: #262626;
-	--gray-900: #171717;
-	--gray-950: #0a0a0a;
+	--gray-100: #f4f4f5;
+	--gray-200: #e4e4e7;
+	--gray-300: #d4d4d8;
+	--gray-400: #a1a1aa;
+	--gray-500: #71717a;
+	--gray-600: #52525b;
+	--gray-700: #3f3f46;
+	--gray-800: #27272a;
+	--gray-900: #18181b;
+	--gray-950: #09090b;
 
-	/* Accent colors - Tech cyan/teal / 点缀色 - 科技感青蓝 */
-	--accent-50: #ecfeff;
-	--accent-100: #cffafe;
-	--accent-200: #a5f3fc;
-	--accent-300: #67e8f9;
-	--accent-400: #22d3ee;
-	--accent-500: #06b6d4;  /* Primary accent / 主点缀色 */
-	--accent-600: #0891b2;
-	--accent-700: #0e7490;
-	--accent-800: #155e75;
-	--accent-900: #164e63;
+	/* Accent colors - Geek Orange / 点缀色 - 极客橙 */
+	--accent-50: #fff7ed;
+	--accent-100: #ffedd5;
+	--accent-200: #fed7aa;
+	--accent-300: #fdba74;
+	--accent-400: #fb923c;
+	--accent-500: #f97316;  /* Primary accent / 主点缀色 */
+	--accent-600: #ea580c;
+	--accent-700: #c2410c;
+	--accent-800: #9a3412;
+	--accent-900: #7c2d12;
 
 	/* Status colors / 状态色 */
-	--success: #10b981;
-	--warning: #f59e0b;
+	--success: #22c55e;
+	--warning: #eab308;
 	--error: #ef4444;
 	--info: var(--accent-500);
 
 	/* === Semantic Variables - Light Mode / 语义化变量 - 亮色模式 === */
 	/* Backgrounds / 背景 */
-	--bg-primary: var(--gray-50);
+	--bg-primary: #fafafa;
 	--bg-secondary: #ffffff;
 	--bg-tertiary: var(--gray-100);
 	--bg-elevated: #ffffff;
-	--bg-overlay: rgba(0, 0, 0, 0.5);
+	--bg-overlay: rgba(0, 0, 0, 0.6);
 
 	/* Foreground/Text / 前景/文字 */
 	--text-primary: var(--gray-900);
@@ -58,26 +61,26 @@
 	/* Interactive states / 交互状态 */
 	--hover-bg: var(--gray-100);
 	--active-bg: var(--gray-200);
-	--focus-ring: rgba(6, 182, 212, 0.3);
+	--focus-ring: rgba(249, 115, 22, 0.25);
 
 	/* Component specific / 组件特定 */
 	/* Message bubbles / 消息气泡 */
-	--bubble-me: var(--gray-800);
+	--bubble-me: var(--gray-900);
 	--bubble-me-text: #ffffff;
 	--bubble-other: #ffffff;
 	--bubble-other-text: var(--gray-900);
 	--bubble-system: var(--gray-100);
 	--bubble-system-text: var(--gray-600);
-	--bubble-private: var(--accent-700);
+	--bubble-private: var(--accent-600);
 	--bubble-private-text: #ffffff;
 
-	/* Sidebar / 侧边栏 */
-	--sidebar-bg: var(--gray-900);
+	/* Sidebar / 侧边栏 - 保持深色风格（极客终端感） */
+	--sidebar-bg: var(--gray-950);
 	--sidebar-text: var(--gray-100);
 	--sidebar-text-secondary: var(--gray-400);
 	--sidebar-hover: var(--gray-800);
 	--sidebar-active: var(--accent-600);
-	--sidebar-border: var(--gray-700);
+	--sidebar-border: var(--gray-800);
 
 	/* Input fields / 输入框 */
 	--input-bg: #ffffff;
@@ -99,27 +102,34 @@
 	--scrollbar-thumb-hover: var(--gray-400);
 
 	/* Shadows / 阴影 */
-	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.06);
+	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.08);
 	--shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
-	--shadow-glow: 0 0 20px rgba(6, 182, 212, 0.15);
+	--shadow-glow: 0 0 20px rgba(249, 115, 22, 0.2);
+	--shadow-glow-lg: 0 0 40px rgba(249, 115, 22, 0.15);
 
 	/* Animation durations / 动画时长 */
 	--duration-fast: 150ms;
 	--duration-normal: 250ms;
 	--duration-slow: 400ms;
+	--duration-slower: 600ms;
 
 	/* Easing functions / 缓动函数 */
 	--ease-out: cubic-bezier(0.16, 1, 0.3, 1);
 	--ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 	--ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 
 	/* Layout / 布局 */
 	--sidebar-width: 250px;
 	--rightbar-width: 260px;
 	--header-height: 60px;
 	--input-area-height: 60px;
+
+	/* Typography / 字体 */
+	--font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', 'Consolas', monospace;
+	--font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
 }
 
 /* === Dark Mode / 暗色模式 === */
@@ -128,8 +138,8 @@
 	--bg-primary: var(--gray-950);
 	--bg-secondary: var(--gray-900);
 	--bg-tertiary: var(--gray-800);
-	--bg-elevated: var(--gray-800);
-	--bg-overlay: rgba(0, 0, 0, 0.7);
+	--bg-elevated: var(--gray-900);
+	--bg-overlay: rgba(0, 0, 0, 0.8);
 
 	/* Foreground/Text / 前景/文字 */
 	--text-primary: var(--gray-50);
@@ -139,12 +149,13 @@
 	--text-inverse: var(--gray-900);
 
 	/* Borders / 边框 */
-	--border-primary: var(--gray-700);
-	--border-secondary: var(--gray-600);
+	--border-primary: var(--gray-800);
+	--border-secondary: var(--gray-700);
 
 	/* Interactive states / 交互状态 */
 	--hover-bg: var(--gray-800);
 	--active-bg: var(--gray-700);
+	--focus-ring: rgba(249, 115, 22, 0.35);
 
 	/* Component specific / 组件特定 */
 	/* Message bubbles / 消息气泡 */
@@ -154,41 +165,42 @@
 	--bubble-other-text: var(--gray-100);
 	--bubble-system: var(--gray-800);
 	--bubble-system-text: var(--gray-400);
-	--bubble-private: var(--accent-800);
+	--bubble-private: var(--accent-700);
 	--bubble-private-text: var(--accent-100);
 
 	/* Sidebar (stays dark in both modes) / 侧边栏（两种模式都保持深色） */
-	--sidebar-bg: var(--gray-950);
+	--sidebar-bg: #000000;
 	--sidebar-text: var(--gray-200);
 	--sidebar-text-secondary: var(--gray-500);
-	--sidebar-hover: var(--gray-800);
-	--sidebar-active: var(--accent-700);
+	--sidebar-hover: var(--gray-900);
+	--sidebar-active: var(--accent-600);
 	--sidebar-border: var(--gray-800);
 
 	/* Input fields / 输入框 */
 	--input-bg: var(--gray-800);
-	--input-border: var(--gray-600);
+	--input-border: var(--gray-700);
 	--input-text: var(--gray-100);
 	--input-placeholder: var(--gray-500);
 
 	/* Buttons / 按钮 */
-	--btn-primary-bg: var(--accent-600);
-	--btn-primary-hover: var(--accent-500);
+	--btn-primary-bg: var(--accent-500);
+	--btn-primary-hover: var(--accent-400);
 	--btn-secondary-bg: var(--gray-700);
 	--btn-secondary-text: var(--gray-200);
 	--btn-secondary-hover: var(--gray-600);
 
 	/* Scrollbars / 滚动条 */
-	--scrollbar-track: var(--gray-800);
-	--scrollbar-thumb: var(--gray-600);
-	--scrollbar-thumb-hover: var(--gray-500);
+	--scrollbar-track: var(--gray-900);
+	--scrollbar-thumb: var(--gray-700);
+	--scrollbar-thumb-hover: var(--gray-600);
 
 	/* Shadows - use glow effects in dark mode / 阴影 - 暗色模式使用发光效果 */
-	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
-	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
-	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
-	--shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.5);
-	--shadow-glow: 0 0 30px rgba(6, 182, 212, 0.2);
+	--shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+	--shadow-md: 0 4px 6px rgba(0, 0, 0, 0.5);
+	--shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.6);
+	--shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+	--shadow-glow: 0 0 30px rgba(249, 115, 22, 0.25);
+	--shadow-glow-lg: 0 0 50px rgba(249, 115, 22, 0.2);
 }
 
 /* === Responsive Layout Variables / 响应式布局变量 === */
@@ -202,6 +214,10 @@
 /* === Base Styles / 基础样式 === */
 * {
 	box-sizing: border-box;
+}
+
+html {
+	font-family: var(--font-sans);
 }
 
 /* Smooth transitions for theme changes / 主题切换平滑过渡 */
@@ -218,26 +234,26 @@ button,
 select,
 textarea {
 	transition:
-		background-color var(--duration-normal) var(--ease-out),
-		color var(--duration-normal) var(--ease-out),
-		border-color var(--duration-normal) var(--ease-out),
-		box-shadow var(--duration-normal) var(--ease-out);
+		background-color var(--duration-normal) var(--ease-smooth),
+		color var(--duration-normal) var(--ease-smooth),
+		border-color var(--duration-normal) var(--ease-smooth),
+		box-shadow var(--duration-normal) var(--ease-smooth);
 }
 
 /* Custom scrollbar styling / 自定义滚动条样式 */
 ::-webkit-scrollbar {
-	width: 8px;
-	height: 8px;
+	width: 6px;
+	height: 6px;
 }
 
 ::-webkit-scrollbar-track {
 	background: var(--scrollbar-track);
-	border-radius: 4px;
+	border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb {
 	background: var(--scrollbar-thumb);
-	border-radius: 4px;
+	border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
@@ -265,4 +281,9 @@ textarea {
 [data-theme="dark"] ::selection {
 	background: var(--accent-700);
 	color: var(--gray-50);
+}
+
+/* Geek-style monospace elements / 极客风格等宽字体元素 */
+.mono, code, pre, .code-style {
+	font-family: var(--font-mono);
 }

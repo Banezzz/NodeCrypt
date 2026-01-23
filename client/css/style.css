@@ -1,10 +1,16 @@
+/* ====== NodeCrypt Main Styles ====== */
+/* Geek-style UI - Orange + Black/White/Gray */
+/* 极客风格 UI - 橙色 + 黑白灰 */
+
 body {
 	margin: 0;
-	font-family: 'Roboto', Arial, sans-serif;
+	font-family: var(--font-sans);
 	height: 100vh;
 	overflow: hidden;
 	background: var(--bg-primary);
 	color: var(--text-primary);
+	-webkit-font-smoothing: antialiased;
+	-moz-osx-font-smoothing: grayscale;
 }
 
 .login-page {
@@ -16,15 +22,29 @@ body {
 	overflow: hidden;
 }
 
-/* 登录页科技感背景动画 / Login page tech background animation */
+/* 登录页极客风格背景 / Login page geek-style background */
 .login-page::before {
 	content: '';
 	position: absolute;
 	inset: 0;
 	background:
-		radial-gradient(ellipse at 20% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%),
-		radial-gradient(ellipse at 80% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
-	animation: login-bg-pulse 8s ease-in-out infinite alternate;
+		radial-gradient(ellipse at 20% 30%, rgba(249, 115, 22, 0.08) 0%, transparent 50%),
+		radial-gradient(ellipse at 80% 70%, rgba(249, 115, 22, 0.06) 0%, transparent 50%);
+	animation: login-bg-pulse 10s ease-in-out infinite alternate;
+	pointer-events: none;
+	z-index: 0;
+}
+
+/* 微妙的网格背景 / Subtle grid background */
+.login-page::after {
+	content: '';
+	position: absolute;
+	inset: 0;
+	background-image:
+		linear-gradient(var(--border-primary) 1px, transparent 1px),
+		linear-gradient(90deg, var(--border-primary) 1px, transparent 1px);
+	background-size: 60px 60px;
+	opacity: 0.3;
 	pointer-events: none;
 	z-index: 0;
 }
@@ -46,18 +66,19 @@ body {
 	background: var(--bg-primary);
 }
 
+/* === Sidebar / 侧边栏 === */
 .sidebar {
 	width: var(--sidebar-width);
-	background: var(--bg-secondary);
-	border-right: 1px solid var(--border-primary);
+	background: var(--sidebar-bg);
+	border-right: 1px solid var(--sidebar-border);
 	display: flex;
 	flex-direction: column;
-	box-shadow: 2px 0 8px var(--shadow-sm);
+	box-shadow: 2px 0 12px rgba(0, 0, 0, 0.15);
 	transition: opacity var(--duration-normal) var(--ease-out), background-color var(--duration-normal) var(--ease-out);
 	position: relative;
 }
 
-/* 侧边栏发光边框效果 / Sidebar glow border effect */
+/* 侧边栏橙色发光边框效果 / Sidebar orange glow border effect */
 .sidebar::after {
 	content: '';
 	position: absolute;
@@ -72,7 +93,7 @@ body {
 		var(--accent-500) 80%,
 		transparent 100%
 	);
-	opacity: 0.3;
+	opacity: 0.4;
 	pointer-events: none;
 	z-index: 10;
 }
@@ -80,10 +101,17 @@ body {
 .sidebar-user {
 	display: flex;
 	align-items: center;
-	padding: 17.2px 18px 10px 17px;
-	background: var(--bg-secondary);
-	border-bottom: 1px solid var(--border-secondary);
+	padding: 18px 18px 12px 17px;
+	background: transparent;
+	border-bottom: 1px solid var(--sidebar-border);
 	position: relative;
+}
+
+.sidebar-username {
+	color: var(--sidebar-text);
+	font-weight: 600;
+	font-size: 15px;
+	letter-spacing: 0.3px;
 }
 
 .settings-btn {
@@ -91,30 +119,40 @@ body {
 	background: none;
 	border: none;
 	cursor: pointer;
-	padding: 4px;
-	border-radius: 50%;
+	padding: 6px;
+	border-radius: 8px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: background-color 0.2s ease;
+	transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .settings-btn:hover {
-	background: var(--hover-bg);
+	background: var(--sidebar-hover);
+	transform: rotate(30deg);
 }
 
 .settings-btn svg {
 	display: block;
 }
 
-/* Settings sidebar overlay styles */
+.settings-btn svg path {
+	fill: var(--sidebar-text-secondary);
+	transition: fill var(--duration-fast) var(--ease-out);
+}
+
+.settings-btn:hover svg path {
+	fill: var(--accent-500);
+}
+
+/* === Settings Sidebar / 设置侧边栏 === */
 .settings-sidebar {
 	width: var(--sidebar-width);
 	background: var(--bg-secondary);
 	border-right: 1px solid var(--border-primary);
 	display: flex;
 	flex-direction: column;
-	box-shadow: var(--shadow-lg);
+	box-shadow: var(--shadow-xl);
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -129,36 +167,48 @@ body {
 }
 
 .settings-header {
-    display: flex;
-    align-items: center;
-    padding: 19.2px 18px 18px 12px;
-    background: var(--bg-secondary);
-    border-bottom: 1px solid var(--border-secondary);
-    position: relative;
+	display: flex;
+	align-items: center;
+	padding: 20px 18px 18px 12px;
+	background: var(--bg-secondary);
+	border-bottom: 1px solid var(--border-secondary);
+	position: relative;
 }
 
 .settings-back-btn {
 	background: none;
 	border: none;
 	cursor: pointer;
-	padding: 4px;
-	border-radius: 50%;
+	padding: 6px;
+	border-radius: 8px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: background-color 0.2s ease;
+	transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 	margin-right: 12px;
 }
 
 .settings-back-btn:hover {
 	background: var(--hover-bg);
+	transform: translateX(-2px);
+}
+
+.settings-back-btn svg path {
+	stroke: var(--text-secondary);
+	transition: stroke var(--duration-fast) var(--ease-out);
+}
+
+.settings-back-btn:hover svg path {
+	stroke: var(--accent-500);
 }
 
 .settings-title {
-	font-size: 1.3rem;
+	font-size: 1.25rem;
 	font-weight: 600;
 	margin: 0;
 	color: var(--accent-500);
+	font-family: var(--font-mono);
+	letter-spacing: -0.5px;
 }
 
 .settings-content {
@@ -169,14 +219,17 @@ body {
 }
 
 .settings-section {
-	margin-bottom: 24px;
+	margin-bottom: 28px;
 }
 
 .settings-section-title {
-	font-size: 1.1rem;
+	font-size: 0.85rem;
 	font-weight: 600;
-	margin-bottom: 12px;
-	color: var(--text-primary);
+	margin-bottom: 14px;
+	color: var(--text-secondary);
+	text-transform: uppercase;
+	letter-spacing: 1px;
+	font-family: var(--font-mono);
 	border-bottom: 1px solid var(--border-primary);
 	padding-bottom: 8px;
 }
@@ -185,10 +238,10 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	font-size: 1rem;
+	font-size: 0.95rem;
 	color: var(--text-primary);
-	margin-bottom: 12px;
-	padding: 8px 0;
+	margin-bottom: 14px;
+	padding: 10px 0;
 }
 
 .settings-item-label {
@@ -197,26 +250,25 @@ body {
 }
 
 .settings-item-description {
-	font-size: 0.9rem;
-	color: var(--text-secondary);
+	font-size: 0.85rem;
+	color: var(--text-tertiary);
 	margin-top: 4px;
 }
 
-/* Language switcher specific styles */
-/* 语言切换器专用样式 */
+/* Language switcher specific styles / 语言切换器专用样式 */
 .language-current {
 	font-weight: 500;
 	color: var(--accent-500);
 	font-size: 0.85rem;
 	letter-spacing: 0.3px;
+	font-family: var(--font-mono);
 }
 
 .settings-item .switch + .language-indicator {
 	display: none;
 }
 
-/* Language selector styles */
-/* 语言选择器样式 */
+/* Language selector styles / 语言选择器样式 */
 .language-selector {
 	position: relative;
 }
@@ -225,7 +277,7 @@ body {
 	background: var(--input-bg);
 	border: 1px solid var(--input-border);
 	border-radius: 8px;
-	padding: 8px 32px 8px 12px;
+	padding: 10px 36px 10px 14px;
 	font-size: 14px;
 	color: var(--input-text);
 	cursor: pointer;
@@ -233,11 +285,12 @@ body {
 	appearance: none;
 	-webkit-appearance: none;
 	-moz-appearance: none;
-	min-width: 120px;
+	min-width: 130px;
+	font-family: var(--font-sans);
 	transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
 	background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
 	background-repeat: no-repeat;
-	background-position: right 8px center;
+	background-position: right 10px center;
 	background-size: 16px;
 }
 
@@ -251,32 +304,26 @@ body {
 }
 
 .language-select option {
-	padding: 8px 12px;
+	padding: 10px 14px;
 	color: var(--text-primary);
 	background: var(--bg-secondary);
 }
 
-.language-select option:hover {
-	background: var(--hover-bg);
-}
-
-/* Theme selector styles */
-/* 主题选择器样式 */
+/* Theme selector styles / 主题选择器样式 */
 .theme-selector {
 	display: flex;
-	gap: 12px;
+	gap: 10px;
 	overflow-x: auto;
-	padding: 8px 4px;
-	border-radius: 8px;
+	padding: 10px 4px;
+	border-radius: 10px;
 	background: var(--bg-tertiary);
-	/* Hide scrollbars */
-	scrollbar-width: none; /* Firefox */
-	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none;
+	-ms-overflow-style: none;
 	cursor: grab;
 }
 
 .theme-selector::-webkit-scrollbar {
-	display: none; /* Webkit browsers */
+	display: none;
 }
 
 .theme-selector.dragging {
@@ -286,12 +333,12 @@ body {
 
 .theme-item {
 	flex-shrink: 0;
-	width: 70px;
-	height: 70px;
-	border-radius: 12px;
-	border: 3px solid transparent;
+	width: 64px;
+	height: 64px;
+	border-radius: 10px;
+	border: 2px solid transparent;
 	cursor: pointer;
-	transition: all 0.3s ease;
+	transition: all var(--duration-fast) var(--ease-out);
 	user-select: none;
 	background-size: cover !important;
 	background-position: center !important;
@@ -307,9 +354,9 @@ body {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: rgba(255, 255, 255, 0.1);
-	border-radius: 9px;
-	transition: all 0.3s ease;
+	background: rgba(0, 0, 0, 0.1);
+	border-radius: 8px;
+	transition: all var(--duration-fast) var(--ease-out);
 }
 
 .theme-item:hover {
@@ -319,7 +366,7 @@ body {
 }
 
 .theme-item:hover::before {
-	background: rgba(6, 182, 212, 0.1);
+	background: rgba(249, 115, 22, 0.1);
 }
 
 .theme-item.active {
@@ -328,7 +375,7 @@ body {
 }
 
 .theme-item.active::before {
-	background: rgba(6, 182, 212, 0.15);
+	background: rgba(249, 115, 22, 0.15);
 }
 
 /* Old settings panel - hide */
@@ -336,18 +383,18 @@ body {
 	display: none !important;
 }
 
-/* Old settings panel styles - remove */
 .settings-panel-card,
 .settings-panel-card.open-anim,
 .settings-panel-card.close-anim {
 	display: none !important;
 }
 
+/* Switch toggle / 开关切换 */
 .switch {
 	position: relative;
 	display: inline-block;
-	width: 38px;
-	height: 22px;
+	width: 44px;
+	height: 24px;
 }
 
 .switch input {
@@ -363,30 +410,34 @@ body {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background: var(--border-primary);
-	border-radius: 22px;
+	background: var(--gray-300);
+	border-radius: 24px;
 	transition: background-color var(--duration-normal) var(--ease-out);
+}
+
+[data-theme="dark"] .slider {
+	background: var(--gray-600);
 }
 
 .slider:before {
 	position: absolute;
 	content: "";
-	height: 16px;
-	width: 16px;
+	height: 18px;
+	width: 18px;
 	left: 3px;
 	bottom: 3px;
 	background: var(--bg-secondary);
 	border-radius: 50%;
 	box-shadow: var(--shadow-sm);
-	transition: transform var(--duration-normal) var(--ease-out);
+	transition: transform var(--duration-normal) var(--ease-spring);
 }
 
-.switch input:checked+.slider {
+.switch input:checked + .slider {
 	background: var(--accent-500);
 }
 
-.switch input:checked+.slider:before {
-	transform: translateX(16px);
+.switch input:checked + .slider:before {
+	transform: translateX(20px);
 }
 
 .settings-close {
@@ -395,12 +446,13 @@ body {
 	top: 14px;
 	background: none;
 	border: none;
-	font-size: 1.7rem;
+	font-size: 1.5rem;
 	color: var(--text-muted);
 	cursor: pointer;
 	z-index: 3;
 	line-height: 1;
-	border-radius: 50%;
+	border-radius: 8px;
+	padding: 4px 8px;
 	transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
 }
 
@@ -409,19 +461,26 @@ body {
 	color: var(--accent-500);
 }
 
+/* === Join Room Button / 加入房间按钮 === */
 .sidebar .join-room {
 	display: flex;
 	align-items: center;
 	justify-content: flex-start;
-	padding: 18px 0 18px 0;
-	background: var(--bg-secondary);
-	border-bottom: 1px solid var(--border-primary);
-	font-size: 1.13rem;
+	padding: 16px 0 16px 0;
+	background: transparent;
+	border-bottom: 1px solid var(--sidebar-border);
+	font-size: 1rem;
 	font-weight: 600;
-	letter-spacing: 1px;
+	letter-spacing: 0.5px;
 	cursor: pointer;
 	user-select: none;
+	color: var(--sidebar-text);
 	transition: background-color var(--duration-fast) var(--ease-out);
+}
+
+.sidebar .join-room svg {
+	fill: var(--sidebar-text-secondary);
+	transition: fill var(--duration-fast) var(--ease-out);
 }
 
 .sidebar .join-room input,
@@ -430,97 +489,116 @@ body {
 }
 
 .sidebar .join-room:hover {
-	background: var(--hover-bg);
+	background: var(--sidebar-hover);
 }
 
+.sidebar .join-room:hover svg {
+	fill: var(--accent-500);
+}
+
+/* === Room List / 房间列表 === */
 .sidebar .rooms {
 	flex: 1;
 	overflow-y: auto;
-	background: var(--bg-secondary);
+	background: transparent;
 }
 
 .room {
 	display: flex;
 	align-items: center;
-	padding: 20px 15px;
-	border-bottom: 2px solid var(--border-primary);
+	padding: 16px 14px;
+	border-bottom: 1px solid var(--sidebar-border);
 	cursor: pointer;
-	background: var(--bg-secondary);
-	border-radius: 10px;
-	margin: 6px 8px;
+	background: transparent;
+	border-radius: 8px;
+	margin: 4px 8px;
 	box-sizing: border-box;
 	position: relative;
 	box-shadow: none;
 	transition: background-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
 }
 
+.room .title {
+	color: var(--sidebar-text);
+	font-weight: 500;
+	font-size: 15px;
+}
+
+.room .lastmsg {
+	font-size: 13px;
+	color: var(--sidebar-text-secondary);
+	margin-top: 2px;
+}
+
 .room.active {
-	background: var(--accent-400);
+	background: var(--accent-600);
+	box-shadow: 0 2px 8px rgba(249, 115, 22, 0.25);
+}
+
+.room.active .title {
+	color: #ffffff;
+}
+
+.room.active .lastmsg {
+	color: rgba(255, 255, 255, 0.8);
 }
 
 .room.active:hover {
-	background: var(--accent-400);
+	background: var(--accent-600);
 }
 
 .room:hover:not(.active) {
-	background: var(--hover-bg);
+	background: var(--sidebar-hover);
 }
 
 .room .info {
 	flex: 1;
 }
 
-.room .title {
-	font-weight: 500;
-	font-size: 16px;
-}
-
-.room .lastmsg {
-	font-size: 13px;
-	color: var(--text-secondary);
-	margin-top: 2px;
-}
-
 .room .time {
-	font-size: 12px;
-	color: var(--text-muted);
+	font-size: 11px;
+	color: var(--sidebar-text-secondary);
+	font-family: var(--font-mono);
 }
 
 .room .unread {
 	background: var(--accent-500);
-	color: var(--text-inverse);
-	font-size: 12px;
+	color: #ffffff;
+	font-size: 11px;
 	border-radius: 10px;
-	padding: 2px 7px;
+	padding: 2px 8px;
 	margin-left: 8px;
 	min-width: 20px;
 	text-align: center;
+	font-weight: 600;
 }
 
 .room-unread-badge {
 	position: absolute;
-	right: 18px;
+	right: 14px;
 	top: 50%;
 	transform: translateY(-50%);
-	min-width: 22px;
-	height: 22px;
-	background: linear-gradient(135deg, var(--error) 60%, #ff5e62 100%);
-	color: var(--text-inverse);
-	font-size: 13px;
-	font-weight: bold;
-	border-radius: 50%;
+	min-width: 20px;
+	height: 20px;
+	background: var(--error);
+	color: #ffffff;
+	font-size: 11px;
+	font-weight: 700;
+	border-radius: 10px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	letter-spacing: 0.5px;
+	letter-spacing: 0;
 	z-index: 2;
 	user-select: none;
 	pointer-events: none;
+	padding: 0 6px;
+	font-family: var(--font-mono);
 	transition: transform var(--duration-normal) var(--ease-out), opacity var(--duration-normal) var(--ease-out);
 }
 
 .room:not(.active) .room-unread-badge {
-	animation: badge-pop 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+	animation: badge-pop 0.4s var(--ease-spring);
 }
 
 @keyframes badge-pop {
@@ -538,12 +616,14 @@ body {
 	}
 }
 
+/* === Main Chat Area / 主聊天区域 === */
 .main {
 	display: flex;
 	flex-direction: column;
 	background-size: 100% 100%;
 	position: relative;
 	flex: 2.5;
+	background: var(--bg-primary);
 }
 
 .main::before {
@@ -551,41 +631,44 @@ body {
 	position: absolute;
 	inset: 0;
 	background: url(../assets/wallpaper-1.webp) left top / auto 100% repeat-x;
-	opacity: 0.15;
+	opacity: 0.08;
 	mix-blend-mode: multiply;
 	pointer-events: none;
 	z-index: 0;
 }
 
-/* 聊天区科技感网格背景 / Chat area tech grid background */
+/* 聊天区极客风格网格背景 / Chat area geek-style grid background */
 .main::after {
 	content: '';
 	position: absolute;
 	inset: 0;
 	background-image: radial-gradient(circle at 1px 1px, var(--border-primary) 1px, transparent 0);
-	background-size: 40px 40px;
-	opacity: 0.4;
+	background-size: 32px 32px;
+	opacity: 0.5;
 	pointer-events: none;
 	z-index: 0;
 }
 
+/* === Main Header / 主标题栏 === */
 .main-header {
 	display: flex;
 	align-items: center;
-	padding: 14.6px;
+	padding: 14px 16px;
 	background: var(--bg-elevated);
 	justify-content: space-between;
 	min-height: 30px;
 	position: relative;
 	z-index: 3;
 	border-bottom: 1px solid var(--border-primary);
+	backdrop-filter: blur(8px);
 }
 
 .main-header .group-title {
-	font-weight: bold;
-	font-size: 18px;
-	margin-left: 16px;
+	font-weight: 600;
+	font-size: 17px;
+	margin-left: 12px;
 	color: var(--text-primary);
+	font-family: var(--font-mono);
 }
 
 .main-header-right {
@@ -603,91 +686,97 @@ body {
 }
 
 .pinned {
-	padding: 2px 24px;
+	padding: 2px 20px;
 	background: var(--bg-elevated);
 	font-size: 13px;
 	color: var(--accent-700);
 	border-bottom: 1px solid var(--border-primary);
 	min-height: 18px;
-	border-left: 4px solid var(--accent-500);
+	border-left: 3px solid var(--accent-500);
 	font-weight: 500;
 }
 
+[data-theme="dark"] .pinned {
+	color: var(--accent-400);
+}
+
+/* === Chat Area / 聊天区 === */
 .chat-area {
 	flex: 1;
 	overflow-y: auto;
-	padding: 15px 15px 15px 15px;
+	padding: 16px;
 	display: flex;
 	flex-direction: column;
 	background: none;
 	z-index: 1;
 }
 
+/* === Message Bubbles / 消息气泡 === */
 .bubble {
-	max-width: 80%;
-	padding: 12px 18px;
-	border-radius: 13px;
-	margin-bottom: .375rem;
-	font-size: 15px;
+	max-width: 75%;
+	padding: 12px 16px;
+	border-radius: 12px;
+	margin-bottom: 6px;
+	font-size: 14px;
 	line-height: 1.6;
 	position: relative;
-	word-break: break-all;
+	word-break: break-word;
 	display: flex;
 	flex-direction: column;
 }
 
 .bubble-content {
 	display: block;
-	word-break: break-all;
+	word-break: break-word;
 }
 
 .bubble-meta {
-	font-size: 12px;
+	font-size: 11px;
 	color: var(--text-muted);
 	margin-left: 0;
 	align-self: flex-end;
 	position: absolute;
-	right: 3px;
-	bottom: 7px;
+	right: 4px;
+	bottom: 6px;
 	display: inline-block;
 	background: transparent;
 	line-height: 1;
+	font-family: var(--font-mono);
 }
 
 .bubble.me {
 	background: var(--bubble-me);
 	color: var(--bubble-me-text);
 	margin-left: auto;
-	border-bottom-right-radius: 0px;
-	padding: 10px 39px 7px 10px;
+	border-bottom-right-radius: 4px;
+	padding: 10px 36px 8px 12px;
 }
 
 .bubble.other {
 	background: var(--bubble-other);
 	max-width: 100%;
 	color: var(--bubble-other-text);
-	border-bottom-left-radius: 0px;
+	border-bottom-left-radius: 4px;
 	margin-left: 0px;
-	padding: 1px 40px 5px 10px;
+	padding: 4px 36px 6px 12px;
 	border: 1px solid var(--border-primary);
 }
 
 .bubble.other .bubble-meta {
-	right: 4px;
+	right: 6px;
 }
 
 .bubble .bubble-meta {
-	font-size: 12px;
+	font-size: 11px;
 	color: var(--text-muted);
 	text-align: right;
 }
 
 .bubble.me .bubble-meta {
-	color: rgba(255, 255, 255, 0.7);
+	color: rgba(255, 255, 255, 0.6);
 }
 
-/* Special positioning for file message bubbles */
-/* 文件消息气泡的特殊定位 */
+/* Special positioning for file message bubbles / 文件消息气泡的特殊定位 */
 .bubble:has(.file-message) .bubble-meta {
 	position: static;
 	margin-left: 0;
@@ -695,18 +784,15 @@ body {
 	text-align: right;
 }
 
-/* Remove right padding for file message bubbles since timestamp is not absolute */
-/* 移除文件消息气泡的右边距，因为时间戳不是绝对定位 */
 .bubble.me:has(.file-message) {
-	padding: 10px 10px 7px 10px;
+	padding: 10px 12px 8px 12px;
 }
 
 .bubble.other:has(.file-message) {
-	padding: 1px 10px 5px 10px;
+	padding: 4px 12px 6px 12px;
 }
 
 /* Fallback for browsers that don't support :has() */
-/* 为不支持 :has() 的浏览器提供后备方案 */
 .bubble.file-bubble .bubble-meta {
 	position: static;
 	margin-left: 0;
@@ -714,14 +800,12 @@ body {
 	text-align: right;
 }
 
-/* Fallback: Remove right padding for file message bubbles */
-/* 后备方案：移除文件消息气泡的右边距 */
 .bubble.me.file-bubble {
-	padding: 10px 10px 7px 10px;
+	padding: 10px 12px 8px 12px;
 }
 
 .bubble.other.file-bubble {
-	padding: 1px 10px 5px 10px;
+	padding: 4px 12px 6px 12px;
 }
 
 .bubble-other-wrap {
@@ -729,7 +813,7 @@ body {
 	align-items: flex-end;
 	position: relative;
 	z-index: 2;
-	margin-bottom: .375rem;
+	margin-bottom: 6px;
 }
 
 .bubble-other-main {
@@ -739,16 +823,19 @@ body {
 }
 
 .bubble-other-name {
-	font-size: 13px;
+	font-size: 12px;
 	color: var(--accent-500);
-	font-weight: 500;
-	margin-left: -5px;
+	font-weight: 600;
+	margin-left: -4px;
+	margin-bottom: 2px;
+	font-family: var(--font-mono);
 }
 
+/* === Chat Input Area / 聊天输入区 === */
 :root {
-	--chat-input-border-radius: 1rem;
+	--chat-input-border-radius: 14px;
 	--chat-input-size: 3.25rem;
-	--chat-input-inner-padding: 1.25rem;
+	--chat-input-inner-padding: 1rem;
 	--surface-color: var(--bg-elevated);
 }
 
@@ -756,30 +843,30 @@ body {
 	display: flex;
 	justify-content: center;
 	align-items: flex-end;
-	padding: 3px 30px 17px 30px;
+	padding: 4px 24px 16px 24px;
 	background: none;
 }
 
 .rows-wrapper {
 	transform: translate(0) scaleX(1);
 	border-end-end-radius: 0;
-	min-height: 37px;
+	min-height: 40px;
 	max-height: none;
 }
 
 .chat-input-wrapper {
-	--padding-vertical: .6000rem;
+	--padding-vertical: .6rem;
 	--padding-horizontal: var(--chat-input-inner-padding);
 	--padding: var(--padding-vertical) var(--padding-horizontal);
-	--button-size: 2.125rem;
+	--button-size: 2rem;
 	--button-horizontal-margin: .125rem;
 	display: flex;
 	align-items: center;
 	flex-direction: column;
-	width: 80%;
+	width: 75%;
 	justify-content: center;
 	border-radius: var(--chat-input-border-radius);
-	min-height: 37px;
+	min-height: 40px;
 	max-height: none;
 	flex: 0 0 auto;
 	position: relative;
@@ -792,10 +879,17 @@ body {
 	position: absolute;
 	inset: 0;
 	border-radius: inherit;
-	box-shadow: 0 1px 8px 1px #0000001f;
+	box-shadow: var(--shadow-md);
 	background-color: var(--surface-color);
+	border: 1px solid var(--border-primary);
 	opacity: 1;
 	z-index: -1;
+	transition: border-color var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+}
+
+.chat-input-wrapper:focus-within::before {
+	border-color: var(--accent-500);
+	box-shadow: var(--shadow-md), 0 0 0 3px var(--focus-ring);
 }
 
 .bubble-tail {
@@ -827,7 +921,7 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	border-radius: 50%;
+	border-radius: 8px;
 	transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
@@ -847,35 +941,43 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	margin: 0px 10px 3px 10px;
-	padding-left: unset;
-	padding-right: unset;
+	margin: 0px 8px 2px 8px;
+	padding: 4px;
+	border-radius: 8px;
 	transition: color var(--duration-fast) var(--ease-out), background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .chat-emoji-btn:hover {
 	color: var(--accent-500);
 	background: var(--hover-bg);
-	border-radius: 50%;
 }
 
 .chat-emoji-btn:active {
 	transform: scale(0.95);
 }
 
+.chat-emoji-btn svg path {
+	fill: var(--text-muted);
+	transition: fill var(--duration-fast) var(--ease-out);
+}
+
+.chat-emoji-btn:hover svg path {
+	fill: var(--accent-500);
+}
+
 .btn-icon.rp.btn-menu-toggle {
 	position: relative;
-	width: 2.125rem;
-	height: 2.125rem;
+	width: 2rem;
+	height: 2rem;
 	border: none;
 	background: none;
-	border-radius: 50%;
+	border-radius: 8px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	cursor: pointer;
 	overflow: hidden;
-	transition: background-color 0.2s ease;
+	transition: background-color var(--duration-fast) var(--ease-out);
 }
 
 .btn-icon.rp.btn-menu-toggle:hover {
@@ -913,20 +1015,20 @@ body {
 	display: flex;
 	flex-direction: column;
 	position: relative;
-	margin: 0 30px 0 0;
+	margin: 0 28px 0 0;
 	justify-content: center;
-	min-height: 37px;
+	min-height: 40px;
 	max-height: none;
 }
 
 .input-message-input {
-	min-height: 37px;
-	max-height: calc(37px * 14);
+	min-height: 40px;
+	max-height: calc(40px * 12);
 	outline: none;
 	border: none;
 	background: transparent;
-	font-size: 16px;
-	line-height: 37px;
+	font-size: 15px;
+	line-height: 40px;
 	padding: 0;
 	margin: 0;
 	resize: none;
@@ -939,6 +1041,7 @@ body {
 	word-wrap: break-word;
 	overflow-wrap: break-word;
 	max-width: 99%;
+	font-family: var(--font-sans);
 }
 
 .input-field-placeholder {
@@ -946,11 +1049,11 @@ body {
 	left: 0;
 	top: 0;
 	color: var(--input-placeholder);
-	font-size: 16px;
+	font-size: 15px;
 	pointer-events: none;
 	padding: 0;
 	margin: 0;
-	line-height: 37px;
+	line-height: 40px;
 	white-space: pre;
 	display: flex;
 	align-items: center;
@@ -958,11 +1061,11 @@ body {
 	transition: opacity var(--duration-fast) var(--ease-out);
 }
 
-.input-message-input:not(:empty)+.input-field-placeholder {
+.input-message-input:not(:empty) + .input-field-placeholder {
 	opacity: 0;
 }
 
-.input-message-input:empty+.input-field-placeholder {
+.input-message-input:empty + .input-field-placeholder {
 	opacity: 1;
 }
 
@@ -974,12 +1077,13 @@ body {
 	display: none !important;
 }
 
+/* === More Menu / 更多菜单 === */
 .more-btn {
-	width: 40px;
-	height: 40px;
+	width: 36px;
+	height: 36px;
 	border: none;
 	background: none;
-	border-radius: 50%;
+	border-radius: 8px;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -988,7 +1092,7 @@ body {
 	position: relative;
 	overflow: hidden;
 	gap: 3px;
-	transition: background-color 0.2s ease, transform 0.2s ease;
+	transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .more-btn:hover {
@@ -1007,9 +1111,9 @@ body {
 	background: var(--bg-elevated);
 	border-radius: 10px;
 	box-shadow: var(--shadow-xl);
-	min-width: 120px;
+	min-width: 140px;
 	z-index: 100;
-	font-size: 1rem;
+	font-size: 0.95rem;
 	width: max-content;
 	user-select: none;
 	-webkit-user-select: none;
@@ -1021,7 +1125,7 @@ body {
 	transform: var(--transform-extra);
 	opacity: 0;
 	pointer-events: none;
-	transform: translateY(-10px) scale(0.95);
+	transform: translateY(-8px) scale(0.96);
 	transition: opacity var(--duration-normal) var(--ease-out), transform var(--duration-normal) var(--ease-out);
 	border: 1px solid var(--border-primary);
 }
@@ -1036,16 +1140,16 @@ body {
 .more-menu.close {
 	opacity: 0;
 	pointer-events: none;
-	transform: translateY(-10px) scale(0.95);
+	transform: translateY(-8px) scale(0.96);
 }
 
 .more-menu-item {
-	padding: 6px 40px;
+	padding: 10px 20px;
 	cursor: pointer;
 	border-radius: 6px;
-	font-size: 15px;
+	font-size: 14px;
 	color: var(--text-primary);
-	margin: 5px 5px;
+	margin: 4px 6px;
 	transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
@@ -1054,6 +1158,7 @@ body {
 	transform: translateX(2px);
 }
 
+/* === Rightbar / 右侧栏 === */
 .rightbar {
 	width: var(--rightbar-width);
 	background: var(--bg-secondary);
@@ -1065,7 +1170,7 @@ body {
 }
 
 .rightbar-header {
-	padding: 20.27px 18px 24px 18px;
+	padding: 20px 18px 20px 18px;
 	border-bottom: 1px solid var(--border-secondary);
 }
 
@@ -1076,20 +1181,22 @@ body {
 }
 
 .rightbar .group-info .title {
-	font-size: 18px;
+	font-size: 17px;
 	font-weight: 600;
 	color: var(--text-primary);
+	font-family: var(--font-mono);
 }
 
 .rightbar .group-info .group-desc {
-	font-size: 13px;
+	font-size: 12px;
 	color: var(--text-secondary);
+	margin-top: 2px;
 }
 
 .rightbar-tabs {
 	background: var(--bg-secondary);
 	border-radius: 0 0 0 0;
-	box-shadow: var(--shadow-sm);
+	box-shadow: none;
 }
 
 .rightbar .tabs {
@@ -1099,19 +1206,23 @@ body {
 }
 
 .rightbar .tabs div {
-	padding: 10px 16px;
+	padding: 10px 14px;
 	cursor: pointer;
-	font-size: 15px;
-	color: var(--accent-500);
+	font-size: 14px;
+	color: var(--text-secondary);
 	font-weight: 500;
-	border-bottom: 1px solid var(--border-primary);
-	border-radius: 8px 8px 0 0;
+	border-bottom: 2px solid transparent;
+	border-radius: 0;
 	margin-right: 8px;
-	transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out), border-bottom-color var(--duration-fast) var(--ease-out);
+	transition: color var(--duration-fast) var(--ease-out), border-bottom-color var(--duration-fast) var(--ease-out);
+}
+
+.rightbar .tabs div:hover {
+	color: var(--accent-500);
 }
 
 .rightbar .tabs .active {
-	background: var(--bg-secondary);
+	background: transparent;
 	color: var(--accent-500);
 	border-bottom: 2px solid var(--accent-500);
 }
@@ -1119,17 +1230,18 @@ body {
 .members {
 	flex: 1;
 	overflow-y: auto;
-	padding: 10px 0;
+	padding: 12px 0;
 	background: var(--bg-secondary);
 }
 
 .member {
 	display: flex;
 	align-items: center;
-	padding: 10px 18px;
+	padding: 10px 16px;
 	border-radius: 8px;
-	margin: 6px 8px;
-	transition: background-color 0.2s ease, transform 0.2s ease;
+	margin: 4px 8px;
+	cursor: pointer;
+	transition: background-color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 }
 
 .member:hover {
@@ -1143,59 +1255,58 @@ body {
 
 .member .member-name {
 	font-weight: 500;
-	font-size: 15px;
+	font-size: 14px;
 	color: var(--text-primary);
 }
 
 .member .member-status {
-	font-size: 12px;
+	font-size: 11px;
 	color: var(--accent-500);
+	font-family: var(--font-mono);
 }
 
 .member-tip {
-  font-size: 13px;
-  color: var(--text-secondary);
-  padding: 4px 18px 2px 18px;
-  margin: 0 0 2px 0;
-  user-select: none;
+	font-size: 12px;
+	color: var(--text-tertiary);
+	padding: 4px 16px 2px 16px;
+	margin: 0 0 2px 0;
+	user-select: none;
 }
 
 .member-tip-center {
-  text-align: center;
-  justify-content: center;
-  display: flex;
+	text-align: center;
+	justify-content: center;
+	display: flex;
 }
 
+/* === Scrollbar / 滚动条 === */
 ::-webkit-scrollbar {
-	width: 4px;
+	width: 5px;
 	background: var(--scrollbar-track);
 }
 
 ::-webkit-scrollbar-thumb {
 	background: var(--scrollbar-thumb);
-	border-radius: 4px;
+	border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
 	background: var(--scrollbar-thumb-hover);
 }
 
-/* File message styles */
-/* 文件消息样式 */
-
+/* === File Message Styles / 文件消息样式 === */
 .file-message {
 	overflow: hidden;
-	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-	max-width: 320px;
+	transition: all var(--duration-normal) var(--ease-smooth);
+	max-width: 300px;
 	width: 100%;
 	position: relative;
 }
 
-
 .file-main-content {
 	display: flex;
 	align-items: center;
-	padding: 3px 3px;
+	padding: 4px;
 	gap: 12px;
 	max-width: 200px;
 }
@@ -1208,10 +1319,10 @@ body {
 }
 
 .file-icon {
-	font-size: 24px;
-	margin-right: 12px;
+	font-size: 22px;
+	margin-right: 10px;
 	flex-shrink: 0;
-	filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+	filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
 .file-details {
@@ -1221,9 +1332,9 @@ body {
 
 .file-name {
 	font-weight: 600;
-	font-size: 14px;
+	font-size: 13px;
 	color: var(--text-primary);
-	margin-bottom: 4px;
+	margin-bottom: 3px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
@@ -1231,17 +1342,18 @@ body {
 }
 
 .file-meta {
-	font-size: 12px;
+	font-size: 11px;
 	color: var(--text-secondary);
 	font-weight: 500;
+	font-family: var(--font-mono);
 }
 
 .file-download-btn {
 	padding: 10px;
-	background: linear-gradient(135deg, var(--accent-400), var(--accent-300));
+	background: linear-gradient(135deg, var(--accent-500), var(--accent-400));
 	color: white;
 	border: none;
-	border-radius: 12px;
+	border-radius: 10px;
 	font-size: 12px;
 	font-weight: 600;
 	cursor: pointer;
@@ -1249,11 +1361,11 @@ body {
 	display: none;
 	align-items: center;
 	justify-content: center;
-	width: 40px;
-	height: 40px;
+	width: 38px;
+	height: 38px;
 	flex-shrink: 0;
 	opacity: 0;
-	transform: scale(0.8) translateY(5px);
+	transform: scale(0.8) translateY(4px);
 	position: relative;
 	overflow: hidden;
 }
@@ -1265,17 +1377,17 @@ body {
 }
 
 .file-download-btn.show.animate-in {
-	animation: downloadBtnAppear 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+	animation: downloadBtnAppear 0.4s var(--ease-spring);
 }
 
 @keyframes downloadBtnAppear {
 	0% {
 		opacity: 0;
-		transform: scale(0.6) translateY(10px) rotate(-5deg);
+		transform: scale(0.6) translateY(8px) rotate(-3deg);
 	}
 	60% {
 		opacity: 1;
-		transform: scale(1.1) translateY(-2px) rotate(2deg);
+		transform: scale(1.05) translateY(-1px) rotate(1deg);
 	}
 	100% {
 		opacity: 1;
@@ -1284,14 +1396,15 @@ body {
 }
 
 .file-download-btn svg {
-	width: 20px;
-	height: 20px;
+	width: 18px;
+	height: 18px;
 	fill: currentColor;
 }
 
 .file-download-btn:hover {
-	background: linear-gradient(135deg, var(--accent-500), var(--accent-400));
+	background: linear-gradient(135deg, var(--accent-600), var(--accent-500));
 	transform: translateY(-2px);
+	box-shadow: var(--shadow-glow);
 }
 
 .file-download-btn:active {
@@ -1306,35 +1419,35 @@ body {
 }
 
 .file-progress-container {
-	padding: 0 16px 12px;
-	margin-top: -4px;
+	padding: 0 14px 10px;
+	margin-top: -2px;
 	opacity: 1;
 	max-height: 60px;
 	overflow: hidden;
-	transition: opacity 0.4s ease, max-height 0.4s ease, padding 0.4s ease;
+	transition: opacity var(--duration-slow) var(--ease-out), max-height var(--duration-slow) var(--ease-out), padding var(--duration-slow) var(--ease-out);
 }
 
 .file-progress-container.fade-out {
 	opacity: 0;
 	max-height: 0;
-	padding: 0 16px 0;
+	padding: 0 14px 0;
 }
 
 .file-progress-bar {
 	width: 100%;
-	height: 6px;
+	height: 5px;
 	background: var(--bg-tertiary);
-	border-radius: 6px;
+	border-radius: 3px;
 	overflow: hidden;
-	margin-bottom: 8px;
-	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.1);
+	margin-bottom: 6px;
+	box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.08);
 	transition: opacity var(--duration-normal) var(--ease-out);
 }
 
 .file-progress {
 	height: 100%;
-	background: linear-gradient(90deg, var(--accent-500), var(--accent-400), var(--accent-300));
-	border-radius: 6px;
+	background: linear-gradient(90deg, var(--accent-500), var(--accent-400));
+	border-radius: 3px;
 	transition: width var(--duration-slow) var(--ease-out);
 	width: 0%;
 	position: relative;
@@ -1348,7 +1461,7 @@ body {
 	left: -100%;
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
 	animation: shimmer 2s infinite;
 }
 
@@ -1358,45 +1471,45 @@ body {
 }
 
 .file-status {
-	font-size: 11px;
+	font-size: 10px;
 	color: var(--text-secondary);
 	text-align: center;
 	font-weight: 500;
 	background: var(--bg-tertiary);
 	padding: 4px 8px;
-	border-radius: 8px;
+	border-radius: 6px;
 	display: inline-block;
 	width: 100%;
 	box-sizing: border-box;
+	font-family: var(--font-mono);
 }
 
 .bubble.private-message .file-meta,
-.bubble.private-message .file-name{
-    color:#ffffff !important;
-
-}
-
-.bubble.private-message .file-message .file-download-btn {
-	background: linear-gradient(135deg, #ff9800, #ffb74d);
-	box-shadow: 0 2px 8px rgba(255, 152, 0, 0.3);
-}
-
-.bubble.private-message .file-message .file-download-btn:hover {
-	background: linear-gradient(135deg, #f57c00, #ff9800);
-	box-shadow: 0 4px 16px rgba(255, 152, 0, 0.4);
-}
-
-.bubble.private-message .file-message .file-progress {
-	background: linear-gradient(90deg, #ff9800, #ffb74d, #ffcc80);
-}
-
-.bubble.private-message .file-message .file-status {
-	background: rgba(255, 152, 0, 0.05);
+.bubble.private-message .file-name {
 	color: #ffffff !important;
 }
 
-/* File Upload Modal Styles */
-/* 文件上传模态框样式 */
+.bubble.private-message .file-message .file-download-btn {
+	background: linear-gradient(135deg, #ffffff, #f0f0f0);
+	color: var(--accent-700);
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.bubble.private-message .file-message .file-download-btn:hover {
+	background: linear-gradient(135deg, #f5f5f5, #e8e8e8);
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.bubble.private-message .file-message .file-progress {
+	background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
+}
+
+.bubble.private-message .file-message .file-status {
+	background: rgba(255, 255, 255, 0.15);
+	color: #ffffff !important;
+}
+
+/* === File Upload Modal / 文件上传模态框 === */
 .file-upload-modal {
 	position: fixed;
 	top: 0;
@@ -1406,7 +1519,7 @@ body {
 	z-index: 10000;
 	opacity: 0;
 	visibility: hidden;
-	transition: opacity 0.3s ease, visibility 0.3s ease;
+	transition: opacity var(--duration-normal) var(--ease-out), visibility var(--duration-normal) var(--ease-out);
 }
 
 .file-upload-modal.show {
@@ -1421,7 +1534,7 @@ body {
 	right: 0;
 	bottom: 0;
 	background: var(--bg-overlay);
-	backdrop-filter: blur(4px);
+	backdrop-filter: blur(6px);
 }
 
 .file-upload-container {
@@ -1430,10 +1543,10 @@ body {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	background: var(--bg-elevated);
-	border-radius: 12px;
+	border-radius: 14px;
 	box-shadow: var(--shadow-xl);
 	width: 90%;
-	max-width: 600px;
+	max-width: 560px;
 	max-height: 80vh;
 	display: flex;
 	flex-direction: column;
@@ -1444,47 +1557,49 @@ body {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 20px 24px;
+	padding: 18px 20px;
 	border-bottom: 1px solid var(--border-primary);
 }
 
 .file-upload-header h3 {
 	margin: 0;
-	font-size: 18px;
+	font-size: 17px;
 	font-weight: 600;
 	color: var(--text-primary);
+	font-family: var(--font-mono);
 }
 
 .file-upload-close {
 	background: none;
 	border: none;
-	font-size: 24px;
+	font-size: 22px;
 	color: var(--text-secondary);
 	cursor: pointer;
 	padding: 0;
 	width: 32px;
 	height: 32px;
-	border-radius: 50%;
+	border-radius: 8px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	transition: background-color var(--duration-fast) var(--ease-out);
+	transition: background-color var(--duration-fast) var(--ease-out), color var(--duration-fast) var(--ease-out);
 }
 
 .file-upload-close:hover {
 	background: var(--hover-bg);
+	color: var(--accent-500);
 }
 
 .file-upload-content {
 	flex: 1;
-	padding: 24px;
+	padding: 20px;
 	overflow-y: auto;
 }
 
 .file-drop-zone {
 	border: 2px dashed var(--border-secondary);
-	border-radius: 8px;
-	padding: 40px 20px;
+	border-radius: 10px;
+	padding: 36px 20px;
 	text-align: center;
 	transition: all var(--duration-normal) var(--ease-out);
 	background: var(--bg-tertiary);
@@ -1492,29 +1607,31 @@ body {
 	flex-direction: column;
 	align-items: center;
 	justify-content: center;
-	min-height: 200px;
+	min-height: 180px;
 }
 
 .file-drop-zone:hover,
 .file-drop-zone.drag-over {
 	border-color: var(--accent-500);
 	background: var(--hover-bg);
+	box-shadow: inset 0 0 0 2px var(--focus-ring);
 }
 
 .file-drop-icon {
-	font-size: 48px;
-	margin-bottom: 16px;
-	opacity: 0.6;
+	font-size: 44px;
+	margin-bottom: 14px;
+	opacity: 0.5;
 }
 
 .file-drop-text p {
-	margin: 8px 0;
+	margin: 6px 0;
 	color: var(--text-secondary);
 }
 
 .file-drop-text p:first-child {
-	font-size: 16px;
+	font-size: 15px;
 	color: var(--text-primary);
+	font-weight: 500;
 }
 
 .file-browse-btn {
@@ -1522,31 +1639,35 @@ body {
 	border: none;
 	color: var(--accent-500);
 	cursor: pointer;
-	text-decoration: underline;
+	text-decoration: none;
 	font-size: inherit;
 	padding: 0;
+	font-weight: 500;
+	transition: color var(--duration-fast) var(--ease-out);
 }
 
 .file-browse-btn:hover {
 	color: var(--accent-600);
+	text-decoration: underline;
 }
 
 .file-list-container {
-	animation: fadeInUp 0.3s ease;
+	animation: fadeInUp var(--duration-normal) var(--ease-out);
 }
 
 .file-list-header {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 16px;
-	padding-bottom: 12px;
+	margin-bottom: 14px;
+	padding-bottom: 10px;
 	border-bottom: 1px solid var(--border-primary);
 }
 
 .file-list-title {
 	font-weight: 600;
 	color: var(--text-primary);
+	font-size: 14px;
 }
 
 .file-clear-all-btn {
@@ -1554,21 +1675,22 @@ body {
 	border: 1px solid var(--error);
 	color: var(--error);
 	padding: 6px 12px;
-	border-radius: 4px;
+	border-radius: 6px;
 	cursor: pointer;
 	font-size: 12px;
+	font-weight: 500;
 	transition: all var(--duration-fast) var(--ease-out);
 }
 
 .file-clear-all-btn:hover {
 	background: var(--error);
-	color: var(--text-inverse);
+	color: #ffffff;
 }
 
 .file-list {
-	max-height: 300px;
+	max-height: 280px;
 	overflow-y: auto;
-	margin-bottom: 16px;
+	margin-bottom: 14px;
 }
 
 .file-item {
@@ -1577,7 +1699,7 @@ body {
 	justify-content: space-between;
 	padding: 12px;
 	background: var(--bg-tertiary);
-	border-radius: 6px;
+	border-radius: 8px;
 	margin-bottom: 8px;
 	transition: background-color var(--duration-fast) var(--ease-out);
 }
@@ -1597,12 +1719,14 @@ body {
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	margin-bottom: 4px;
+	margin-bottom: 3px;
+	font-size: 14px;
 }
 
 .file-item-size {
-	font-size: 12px;
+	font-size: 11px;
 	color: var(--text-secondary);
+	font-family: var(--font-mono);
 }
 
 .file-item-remove {
@@ -1611,46 +1735,54 @@ body {
 	color: var(--error);
 	cursor: pointer;
 	padding: 4px;
-	border-radius: 50%;
-	width: 24px;
-	height: 24px;
+	border-radius: 6px;
+	width: 26px;
+	height: 26px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	font-size: 16px;
+	font-size: 14px;
 	transition: background-color var(--duration-fast) var(--ease-out);
 	margin-left: 12px;
 }
 
 .file-item-remove:hover {
-	background: rgba(239, 68, 68, 0.1);
+	background: rgba(239, 68, 68, 0.12);
 }
 
 .file-list-summary {
 	padding: 12px;
-	background: var(--accent-100);
-	border-radius: 6px;
+	background: var(--accent-50);
+	border-radius: 8px;
 	color: var(--accent-700);
-	font-size: 14px;
+	font-size: 13px;
 	text-align: center;
+	border: 1px solid var(--accent-200);
+}
+
+[data-theme="dark"] .file-list-summary {
+	background: rgba(249, 115, 22, 0.1);
+	border-color: rgba(249, 115, 22, 0.2);
+	color: var(--accent-400);
 }
 
 .file-upload-footer {
 	display: flex;
 	justify-content: flex-end;
-	gap: 12px;
-	padding: 20px 24px;
+	gap: 10px;
+	padding: 16px 20px;
 	border-top: 1px solid var(--border-primary);
 }
 
 .file-upload-cancel-btn,
 .file-upload-send-btn {
-	padding: 10px 24px;
-	border-radius: 6px;
+	padding: 10px 20px;
+	border-radius: 8px;
 	border: none;
 	cursor: pointer;
 	font-weight: 500;
-	transition: all 0.2s ease;
+	font-size: 14px;
+	transition: all var(--duration-fast) var(--ease-out);
 }
 
 .file-upload-cancel-btn {
@@ -1670,10 +1802,11 @@ body {
 
 .file-upload-send-btn:hover:not(:disabled) {
 	background: var(--btn-primary-hover);
+	box-shadow: var(--shadow-glow);
 }
 
 .file-upload-send-btn:disabled {
-	background: var(--gray-500);
+	background: var(--gray-400);
 	cursor: not-allowed;
 	opacity: 0.6;
 }
@@ -1681,7 +1814,7 @@ body {
 @keyframes fadeInUp {
 	from {
 		opacity: 0;
-		transform: translateY(20px);
+		transform: translateY(16px);
 	}
 	to {
 		opacity: 1;
@@ -1695,79 +1828,67 @@ body {
 		width: 95%;
 		max-height: 90vh;
 	}
-	
+
 	.file-upload-content {
 		padding: 16px;
 	}
-	
+
 	.file-drop-zone {
-		padding: 30px 15px;
-		min-height: 150px;
+		padding: 28px 14px;
+		min-height: 140px;
 	}
-	
+
 	.file-drop-icon {
-		font-size: 36px;
+		font-size: 32px;
 	}
 }
 
 /* Responsive Design for File Messages */
-/* 文件消息响应式设计 */
 @media (max-width: 768px) {
 	.file-message {
-		max-width: 280px;
+		max-width: 260px;
 	}
-	
+
 	.file-main-content {
-		padding: 3px 3px;
+		padding: 3px;
 		gap: 10px;
 	}
-	
+
 	.file-icon {
-		font-size: 20px;
-		margin-right: 10px;
+		font-size: 18px;
+		margin-right: 8px;
 	}
-	
+
 	.file-name {
-		font-size: 13px;
+		font-size: 12px;
 	}
-	
+
 	.file-meta {
-		font-size: 11px;
-	}
-		.file-download-btn {
-		padding: 8px;
-		width: 36px;
-		height: 36px;
-	}
-	
-	.file-download-btn svg {
-		width: 18px;
-		height: 18px;
-	}
-	
-	.file-progress-container {
-		padding: 0 14px 10px;
-	}
-	
-	.file-progress-bar {
-		height: 5px;
-	}
-	
-	.file-status {
 		font-size: 10px;
+	}
+
+	.file-download-btn {
+		padding: 8px;
+		width: 34px;
+		height: 34px;
+	}
+
+	.file-download-btn svg {
+		width: 16px;
+		height: 16px;
+	}
+
+	.file-progress-container {
+		padding: 0 12px 8px;
+	}
+
+	.file-progress-bar {
+		height: 4px;
+	}
+
+	.file-status {
+		font-size: 9px;
 		padding: 3px 6px;
-	}
-}
-
-
-@keyframes fadeInUp {
-	from {
-		opacity: 0;
-		transform: translateY(10px);
-	}
-	to {
-		opacity: 1;
-		transform: translateY(0);
 	}
 }
 
@@ -1783,53 +1904,52 @@ body {
 	left: -100%;
 	width: 100%;
 	height: 100%;
-	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-	transition: left 0.6s ease;
+	background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.25), transparent);
+	transition: left var(--duration-slower) var(--ease-out);
 }
 
 .file-download-btn:hover::before {
 	left: 100%;
 }
 
-/* Image preview in input */
-/* 输入框图片预览样式 */
+/* === Image Preview / 图片预览 === */
 .input-image-preview {
 	position: relative;
-	display: inline-block; /* 改为 inline-block 以便并排显示 */
-	margin: 4px; /* 统一 margin */
+	display: inline-block;
+	margin: 4px;
 	border-radius: 8px;
-	overflow: visible; /* 允许移除按钮稍微超出 */
+	overflow: visible;
 	background: var(--bg-tertiary);
-	border: 1px solid var(--border-primary); /* 边框调整 */
+	border: 1px solid var(--border-primary);
 	transition: all var(--duration-fast) var(--ease-out);
-	max-width: 80px; /* 限制预览容器的最大宽度 */
+	max-width: 72px;
 }
 
 .input-image-preview:hover {
 	border-color: var(--accent-500);
 	transform: translateY(-1px);
-	box-shadow: var(--shadow-md); /* 调整阴影 */
+	box-shadow: var(--shadow-md);
 }
 
 .input-image-preview-img {
 	display: block;
-	width: 100%; /* 图片宽度充满容器 */
-	height: 60px; /* 固定高度 */
+	width: 100%;
+	height: 54px;
 	object-fit: cover;
-	border-radius: 6px; /* 轻微圆角 */
+	border-radius: 6px;
 }
 
 .input-image-remove-btn {
 	position: absolute;
-	top: -10px; /* 调整位置使其更易点击 */
-	right: -10px; /* 调整位置使其更易点击 */
-	width: 22px; /* 增大点击区域 */
-	height: 22px; /* 增大点击区域 */
+	top: -8px;
+	right: -8px;
+	width: 20px;
+	height: 20px;
 	border: none;
 	border-radius: 50%;
 	background: var(--error);
 	color: white;
-	font-size: 12px;
+	font-size: 11px;
 	font-weight: bold;
 	cursor: pointer;
 	display: flex;
@@ -1850,23 +1970,22 @@ body {
 }
 
 /* Image message in chat bubble */
-/* 聊天气泡中的图片消息样式 */
 .bubble-img {
-	max-width: 300px;
+	max-width: 280px;
 	width: 100%;
 	height: auto;
 	max-height: 200px;
 	object-fit: contain;
 	border-radius: 8px;
 	cursor: pointer;
-	transition: all 0.2s ease;
+	transition: all var(--duration-fast) var(--ease-out);
 	display: block;
 	margin: 4px 0;
 }
 
 .bubble-img:hover {
-	transform: scale(1.02);
-	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+	transform: scale(1.01);
+	box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
 .bubble-content .bubble-img:first-child {
@@ -1878,11 +1997,10 @@ body {
 }
 
 /* Mixed content (text + image) */
-/* 混合内容（文字 + 图片）样式 */
 .bubble-content.mixed-content {
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: 6px;
 }
 
 .bubble-content.mixed-content .message-text {
@@ -1895,43 +2013,234 @@ body {
 
 @media (max-width: 768px) {
 	.input-image-preview-img {
-		width: 60px;
-		height: 45px;
+		width: 56px;
+		height: 42px;
 	}
-	
+
 	.bubble-img {
-		max-width: 250px;
-		max-height: 180px;
+		max-width: 240px;
+		max-height: 170px;
 	}
 }
 
 @media (max-width: 480px) {
 	.input-image-preview-img {
-		width: 50px;
-		height: 38px;
+		width: 48px;
+		height: 36px;
 	}
-	
+
 	.bubble-img {
 		max-width: 200px;
 		max-height: 150px;
 	}
 }
+
+/* === Powered By Footer / 底部版权 === */
 .powered-by {
-  text-align: center;
-  color: var(--text-muted);
-  font-size: 13px;
-  margin: 24px 0 8px 0;
-  letter-spacing: 0.2px;
+	text-align: center;
+	color: var(--text-muted);
+	font-size: 12px;
+	margin: 20px 0 8px 0;
+	letter-spacing: 0.2px;
+	font-family: var(--font-mono);
 }
+
 .powered-by a {
-  color: var(--accent-500);
-  text-decoration: none;
+	color: var(--accent-500);
+	text-decoration: none;
+	transition: color var(--duration-fast) var(--ease-out);
 }
+
 .powered-by a:hover {
-  text-decoration: underline;
+	color: var(--accent-400);
+	text-decoration: underline;
 }
 
-
-h2{
+h2 {
 	margin: 0%;
+}
+
+/* === Send Message Button / 发送消息按钮 === */
+.send-message-btn {
+	background: var(--btn-primary-bg);
+	background: linear-gradient(
+		145deg,
+		var(--accent-500) 0%,
+		var(--accent-600) 100%
+	);
+	position: relative;
+	cursor: pointer;
+	font-size: 17px;
+	padding: 0.65em 0.65em;
+	border-radius: 12px;
+	box-shadow: var(--shadow-md);
+	margin: 0px 0px 2px 6px;
+	transition: all var(--duration-normal) var(--ease-out);
+	z-index: 10;
+	border: none;
+}
+
+.send-message-btn:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--shadow-glow);
+	transition: all var(--duration-normal) var(--ease-out);
+}
+
+.send-message-btn:active {
+	transform: scale(0.96) translateY(0px);
+	box-shadow: var(--shadow-sm);
+	transition: all var(--duration-fast) var(--ease-out);
+}
+
+.send-message-btn .text {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	fill: #fff;
+	transition: all var(--duration-fast) var(--ease-out);
+}
+
+.send-message-btn:hover .text {
+	transform: scale(1.05);
+	transition: all var(--duration-fast) var(--ease-out);
+}
+
+.send-message-btn:active .text {
+	transform: scale(0.95);
+	transition: all 0.1s var(--ease-out);
+}
+
+/* 确保发送按钮的点击区域不被其他元素遮挡 */
+.send-message-btn {
+	position: relative;
+	z-index: 10;
+}
+
+.chat-input-wrapper .send-message-btn {
+	position: relative;
+	z-index: 15;
+}
+
+.new-message-wrapper {
+	position: relative;
+	z-index: 1;
+}
+
+/* === Private Mode Input Styles / 私聊模式输入框样式 === */
+/* Fix for dark mode private chat input visibility / 修复暗色模式私聊输入框可见性 */
+.chat-input-area.private-mode .input-message-input {
+	color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .chat-input-area.private-mode .input-message-input {
+	color: #fafafa !important;
+}
+
+.chat-input-area.private-mode .input-field-placeholder {
+	color: var(--accent-600) !important;
+}
+
+[data-theme="dark"] .chat-input-area.private-mode .input-field-placeholder {
+	color: var(--accent-400) !important;
+}
+
+/* Private mode input wrapper styling */
+.chat-input-area.private-mode .chat-input-wrapper::before {
+	background-color: var(--accent-50) !important;
+	border-color: var(--accent-400) !important;
+	box-shadow: 0 0 0 1px var(--accent-200), var(--shadow-md);
+}
+
+[data-theme="dark"] .chat-input-area.private-mode .chat-input-wrapper::before {
+	background-color: rgba(249, 115, 22, 0.12) !important;
+	border-color: var(--accent-500) !important;
+	box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.2), var(--shadow-md);
+}
+
+/* === Screenshot Protection / 截图保护 === */
+/* Note: True screenshot prevention is impossible with CSS/JS alone */
+/* These measures add deterrents and make casual screenshotting harder */
+
+/* Base protection class */
+.screenshot-protected {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-touch-callout: none;
+}
+
+/* Prevent text selection on sensitive content */
+.bubble.private-message,
+.bubble.private-message * {
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	-webkit-touch-callout: none;
+}
+
+/* Screenshot watermark overlay (appears when printing/screenshots on some browsers) */
+@media print {
+	.chat-area {
+		visibility: hidden !important;
+	}
+
+	.chat-area::after {
+		content: 'CONFIDENTIAL - Screenshot Protected';
+		visibility: visible !important;
+		position: fixed;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		font-size: 48px;
+		color: var(--accent-500);
+		opacity: 0.5;
+		z-index: 99999;
+	}
+}
+
+/* Private message watermark (subtle) */
+.bubble.private-message {
+	position: relative;
+}
+
+.bubble.private-message::before {
+	content: '';
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	width: 12px;
+	height: 12px;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='2'%3E%3Crect x='3' y='11' width='18' height='11' rx='2' ry='2'/%3E%3Cpath d='M7 11V7a5 5 0 0 1 10 0v4'/%3E%3C/svg%3E");
+	background-size: contain;
+	background-repeat: no-repeat;
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+/* Security badge in chat header for private mode */
+.private-chat-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	padding: 2px 8px;
+	background: var(--accent-500);
+	color: #ffffff;
+	font-size: 10px;
+	font-weight: 600;
+	border-radius: 4px;
+	font-family: var(--font-mono);
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+	margin-left: 8px;
+}
+
+.private-chat-badge::before {
+	content: '';
+	width: 6px;
+	height: 6px;
+	background: #ffffff;
+	border-radius: 50%;
+	animation: pulse 2s ease-in-out infinite;
 }
