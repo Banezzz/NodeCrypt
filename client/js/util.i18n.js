@@ -143,6 +143,7 @@ const LANGUAGES = {
 
 			// Sidebar security entry
 			'ui.security_info': 'Security',
+			'ui.preferences': 'Preferences',
 
 			// Security framework
 			'security.framework_title': 'Security Architecture',
@@ -302,6 +303,7 @@ const LANGUAGES = {
 
 			// Sidebar security entry
 			'ui.security_info': '安全说明',
+			'ui.preferences': '偏好设置',
 
 			// Security framework
 			'security.framework_title': '安全架构',

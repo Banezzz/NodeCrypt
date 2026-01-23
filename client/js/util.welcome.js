@@ -111,8 +111,17 @@ function showWelcomeModal() {
 	const langBtn = modal.querySelector(`[data-lang="${currentLang}"]`);
 	if (langBtn) langBtn.classList.add('active');
 
+	// Detect current color mode
+	const storedColorMode = localStorage.getItem('nodecrypt-color-mode');
+	const currentColorMode = storedColorMode || 'system';
+
+	// Select current color mode button
+	modal.querySelectorAll('[data-color]').forEach(btn => btn.classList.remove('active'));
+	const colorBtn = modal.querySelector(`[data-color="${currentColorMode}"]`);
+	if (colorBtn) colorBtn.classList.add('active');
+
 	let selectedLang = currentLang;
-	let selectedColor = 'system';
+	let selectedColor = currentColorMode;
 
 	// Language selection
 	modal.querySelectorAll('[data-lang]').forEach(btn => {
@@ -190,4 +199,21 @@ export function initWelcome() {
 		return true;
 	}
 	return false;
+}
+
+/**
+ * Open welcome modal on demand (for returning users)
+ * 按需打开欢迎模态框（用于老用户）
+ */
+export function openWelcomeModal() {
+	// Don't add blocking class for manual open
+	showWelcomeModal();
+}
+
+/**
+ * Setup preferences button click handler
+ * 设置偏好设置按钮点击处理
+ */
+export function setupPreferencesButton() {
+	document.getElementById('preferences-btn')?.addEventListener('click', openWelcomeModal);
 }

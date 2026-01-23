@@ -62,7 +62,8 @@ import {
 // 从 util.welcome.js 中导入欢迎向导功能函数
 // Import welcome wizard functions from util.welcome.js
 import {
-	initWelcome  // 初始化欢迎向导 / Initialize welcome wizard
+	initWelcome,              // 初始化欢迎向导 / Initialize welcome wizard
+	setupPreferencesButton    // 设置偏好设置按钮 / Setup preferences button
 } from './util.welcome.js';
 
 // 从 util.dom.js 中导入常用 DOM 操作函数
@@ -171,6 +172,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	autofillRoomPwd();	setupInputPlaceholder();
 	setupMoreBtnMenu();
 	setupSecurityInfoButton(); // 设置安全信息按钮 / Setup security info button
+	setupPreferencesButton();  // 设置偏好设置按钮 / Setup preferences button
 	setupImagePreview();	setupEmojiPicker();
 	// 由于我们已经在DOM加载前预先初始化了语言设置，这里不需要重复初始化
 	// initSettings();

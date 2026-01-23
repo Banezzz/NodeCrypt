@@ -345,6 +345,34 @@ body {
 	box-shadow: var(--shadow-sm);
 }
 
+/* === Preferences Button / 偏好设置按钮 === */
+.preferences-btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 6px;
+	margin-top: 16px;
+	padding: 8px 16px;
+	background: transparent;
+	border: none;
+	color: var(--text-muted);
+	font-size: 0.85rem;
+	cursor: pointer;
+	transition: all var(--duration-fast) var(--ease-out);
+	border-radius: 6px;
+}
+
+.preferences-btn:hover {
+	color: var(--accent-500);
+	background: var(--hover-bg);
+}
+
+.preferences-btn svg {
+	width: 16px;
+	height: 16px;
+	stroke: currentColor;
+}
+
 /* === Login Modal / 登录模态框 === */
 .login-modal {
 	position: fixed;

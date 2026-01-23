@@ -5,24 +5,31 @@
 /* 浮动标签动画样式 */
 .input-group {
 	position: relative;
+	margin-top: 8px;
 }
 
 .input-group .floating-label {
 	position: absolute;
-	top: 14px;
-	left: 16px;
+	top: 50%;
+	left: 14px;
+	transform: translateY(-50%);
 	pointer-events: none;
 	font-size: 1rem;
 	color: var(--input-placeholder);
-	transition: all 0.25s var(--ease-spring);
+	transition: all 0.2s var(--ease-out);
 	font-family: var(--font-sans);
+	background: transparent;
+	padding: 0 4px;
 }
 
 .input-group input:focus + .floating-label,
 .input-group input:not(:placeholder-shown) + .floating-label {
+	top: 0;
+	transform: translateY(-50%);
+	font-size: 0.75rem;
 	color: var(--accent-500);
-	transform: translateY(-42px) scale(0.85);
 	font-weight: 500;
+	background: var(--bg-elevated);
 }
 
 .input-group .floating-label span {
