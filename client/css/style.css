@@ -1484,9 +1484,9 @@ body {
 	font-family: var(--font-mono);
 }
 
-.bubble.private-message .file-meta,
-.bubble.private-message .file-name {
-	color: #ffffff !important;
+.chat-area .bubble.private-message .file-meta,
+.chat-area .bubble.private-message .file-name {
+	color: #ffffff;
 }
 
 .bubble.private-message .file-message .file-download-btn {
@@ -1504,9 +1504,20 @@ body {
 	background: linear-gradient(90deg, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0.7));
 }
 
-.bubble.private-message .file-message .file-status {
+.chat-area .bubble.private-message .file-message .file-status {
 	background: rgba(255, 255, 255, 0.15);
-	color: #ffffff !important;
+	color: #ffffff;
+}
+
+/* Dark mode private message file download button */
+[data-theme="dark"] .bubble.private-message .file-download-btn {
+	background: linear-gradient(135deg, var(--accent-600), var(--accent-500));
+	color: var(--gray-100);
+}
+
+[data-theme="dark"] .bubble.private-message .file-download-btn:hover {
+	background: linear-gradient(135deg, var(--accent-500), var(--accent-400));
+	box-shadow: var(--shadow-glow);
 }
 
 /* === File Upload Modal / 文件上传模态框 === */
@@ -2129,31 +2140,31 @@ h2 {
 /* === Private Mode Input Styles / 私聊模式输入框样式 === */
 /* Fix for dark mode private chat input visibility / 修复暗色模式私聊输入框可见性 */
 .chat-input-area.private-mode .input-message-input {
-	color: var(--text-primary) !important;
+	color: var(--text-primary);
 }
 
 [data-theme="dark"] .chat-input-area.private-mode .input-message-input {
-	color: #fafafa !important;
+	color: var(--gray-100);
 }
 
 .chat-input-area.private-mode .input-field-placeholder {
-	color: var(--accent-600) !important;
+	color: var(--accent-600);
 }
 
 [data-theme="dark"] .chat-input-area.private-mode .input-field-placeholder {
-	color: var(--accent-400) !important;
+	color: var(--accent-400);
 }
 
 /* Private mode input wrapper styling */
-.chat-input-area.private-mode .chat-input-wrapper::before {
-	background-color: var(--accent-50) !important;
-	border-color: var(--accent-400) !important;
+.main .chat-input-area.private-mode .chat-input-wrapper::before {
+	background-color: var(--accent-50);
+	border-color: var(--accent-400);
 	box-shadow: 0 0 0 1px var(--accent-200), var(--shadow-md);
 }
 
-[data-theme="dark"] .chat-input-area.private-mode .chat-input-wrapper::before {
-	background-color: rgba(249, 115, 22, 0.12) !important;
-	border-color: var(--accent-500) !important;
+[data-theme="dark"] .main .chat-input-area.private-mode .chat-input-wrapper::before {
+	background-color: rgba(249, 115, 22, 0.12);
+	border-color: var(--accent-500);
 	box-shadow: 0 0 0 1px rgba(249, 115, 22, 0.2), var(--shadow-md);
 }
 

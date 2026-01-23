@@ -423,34 +423,43 @@ body {
 }
 
 /* === Avatar / 头像 === */
-.avatar {
-	width: 44px !important;
-	height: 44px !important;
-	border-radius: 10px !important;
-	display: flex !important;
-	align-items: center !important;
-	justify-content: center !important;
-	font-weight: bold !important;
-	font-size: 18px !important;
-	user-select: none !important;
-	overflow: hidden !important;
-	flex-shrink: 0 !important;
-	object-fit: cover !important;
-	margin-right: 10px !important;
-	box-sizing: border-box !important;
-	z-index: 2 !important;
-	position: relative !important;
-	font-family: var(--font-mono) !important;
+/* Using higher specificity to avoid !important */
+.sidebar .avatar,
+.rightbar .avatar,
+.member .avatar,
+.bubble-other-wrap .avatar,
+.sidebar-user .avatar {
+	width: 44px;
+	height: 44px;
+	border-radius: 10px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	font-weight: bold;
+	font-size: 18px;
+	user-select: none;
+	overflow: hidden;
+	flex-shrink: 0;
+	object-fit: cover;
+	margin-right: 10px;
+	box-sizing: border-box;
+	z-index: 2;
+	position: relative;
+	font-family: var(--font-mono);
 }
 
-.avatar img {
-	width: 100% !important;
-	height: 100% !important;
-	border-radius: 10px !important;
-	object-fit: cover !important;
-	display: block !important;
-	z-index: 2 !important;
-	position: relative !important;
+.sidebar .avatar img,
+.rightbar .avatar img,
+.member .avatar img,
+.bubble-other-wrap .avatar img,
+.sidebar-user .avatar img {
+	width: 100%;
+	height: 100%;
+	border-radius: 10px;
+	object-fit: cover;
+	display: block;
+	z-index: 2;
+	position: relative;
 }
 
 /* === Image Modal / 图片模态框 === */
@@ -599,11 +608,7 @@ body {
 	height: 40px;
 }
 
-.bubble-img {
-	max-width: 220px;
-	max-height: 180px;
-	border-radius: 8px;
-}
+/* Note: .bubble-img styles consolidated in style.css */
 
 .login-modal-close-abs {
 	position: absolute;
@@ -653,66 +658,7 @@ body {
 	user-select: none;
 }
 
-/* === Send Message Button / 发送消息按钮 === */
-.send-message-btn {
-	background: linear-gradient(
-		145deg,
-		var(--accent-500) 0%,
-		var(--accent-600) 100%
-	);
-	position: relative;
-	cursor: pointer;
-	font-size: 17px;
-	padding: 0.6em 0.6em;
-	border-radius: 12px;
-	box-shadow: var(--shadow-md);
-	margin: 0px 0px 2px 6px;
-	transition: all var(--duration-normal) var(--ease-out);
-	z-index: 10;
-	border: none;
-}
-
-.send-message-btn:hover {
-	transform: translateY(-2px);
-	box-shadow: var(--shadow-glow);
-}
-
-.send-message-btn:active {
-	transform: scale(0.96) translateY(0px);
-	box-shadow: var(--shadow-sm);
-}
-
-.send-message-btn .text {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	fill: #fff;
-	transition: all var(--duration-fast) var(--ease-out);
-}
-
-.send-message-btn:hover .text {
-	transform: scale(1.05);
-}
-
-.send-message-btn:active .text {
-	transform: scale(0.95);
-}
-
-/* 确保发送按钮的点击区域不被其他元素遮挡 */
-.send-message-btn {
-	position: relative;
-	z-index: 10;
-}
-
-.chat-input-wrapper .send-message-btn {
-	position: relative;
-	z-index: 15;
-}
-
-.new-message-wrapper {
-	position: relative;
-	z-index: 1;
-}
+/* Note: .send-message-btn styles consolidated in style.css */
 
 /* === Geek Badge / 极客徽章 === */
 .geek-badge {

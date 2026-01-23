@@ -2,6 +2,26 @@
 /* Mobile-first responsive design */
 /* 移动端响应式设计 */
 
+/* === Tablet Landscape / 平板横屏 === */
+@media (max-width: 1024px) {
+	.rightbar {
+		width: 220px;
+	}
+
+	.chat-input-wrapper {
+		width: 80%;
+	}
+
+	.bubble {
+		max-width: 70%;
+	}
+
+	.sidebar {
+		width: 220px;
+	}
+}
+
+/* === Tablet Portrait & Mobile / 平板竖屏和移动端 === */
 @media (max-width: 768px) {
 
 	html,
@@ -82,12 +102,12 @@
 		touch-action: pan-y;
 	}
 
-	.sidebar,
-	.rightbar,
-	.settings-sidebar {
+	.container .sidebar,
+	.container .rightbar,
+	.container .settings-sidebar {
 		position: fixed;
 		top: 0;
-		width: 75vw !important;
+		width: 75vw;
 		max-width: 300px;
 		bottom: 0;
 		z-index: 1000;
@@ -175,8 +195,8 @@
 		transform: scale(0.95);
 	}
 
-	.settings-panel-card {
-		left: 2vw !important;
+	.container .settings-panel-card {
+		left: 2vw;
 	}
 
 	.flip-card {
@@ -205,78 +225,73 @@
 }
 
 /* === Private Chat Styles / 私聊样式 === */
-.member.private-chat-active {
-	background-color: var(--accent-100) !important;
+/* Using higher specificity selectors instead of !important */
+.members .member.private-chat-active {
+	background-color: var(--accent-100);
 	border: 1px solid var(--accent-300);
 	transition: background-color var(--duration-fast) var(--ease-out);
 }
 
-.member.private-chat-active:hover {
-	background-color: var(--accent-200) !important;
+.members .member.private-chat-active:hover {
+	background-color: var(--accent-200);
 }
 
-[data-theme="dark"] .member.private-chat-active {
-	background-color: rgba(249, 115, 22, 0.15) !important;
+[data-theme="dark"] .members .member.private-chat-active {
+	background-color: rgba(249, 115, 22, 0.15);
 	border-color: rgba(249, 115, 22, 0.3);
 }
 
-[data-theme="dark"] .member.private-chat-active:hover {
-	background-color: rgba(249, 115, 22, 0.25) !important;
+[data-theme="dark"] .members .member.private-chat-active:hover {
+	background-color: rgba(249, 115, 22, 0.25);
 }
 
 /* Private mode input area / 私聊模式输入区 */
 .chat-input-area.private-mode .chat-input-wrapper::before {
-	background-color: var(--accent-50) !important;
-	border-color: var(--accent-300) !important;
+	background-color: var(--accent-50);
+	border-color: var(--accent-300);
 	transition: background-color var(--duration-normal) var(--ease-out), border-color var(--duration-normal) var(--ease-out);
 }
 
 [data-theme="dark"] .chat-input-area.private-mode .chat-input-wrapper::before {
-	background-color: rgba(249, 115, 22, 0.1) !important;
-	border-color: var(--accent-600) !important;
+	background-color: rgba(249, 115, 22, 0.1);
+	border-color: var(--accent-600);
 }
 
 /* Private mode input text - ensure visibility / 私聊模式输入文字 - 确保可见性 */
-.chat-input-area.private-mode .input-message-input {
-	color: var(--text-primary) !important;
-}
-
-[data-theme="dark"] .chat-input-area.private-mode .input-message-input {
-	color: var(--gray-100) !important;
-}
+/* Note: These styles are now defined in style.css for single-source-of-truth */
 
 /* Private message bubbles / 私聊消息气泡 */
-.bubble.other.private-message {
-	background-color: var(--bubble-private) !important;
-	color: var(--bubble-private-text) !important;
+.chat-area .bubble.other.private-message {
+	background-color: var(--bubble-private);
+	color: var(--bubble-private-text);
 	border: none;
 }
 
-.bubble.other.private-message .bubble-other-name {
-	color: var(--accent-100) !important;
+.chat-area .bubble.other.private-message .bubble-other-name {
+	color: var(--accent-100);
 }
 
-.bubble.other.private-message .bubble-meta {
-	color: var(--accent-200) !important;
+.chat-area .bubble.other.private-message .bubble-meta {
+	color: var(--accent-200);
 }
 
-.bubble.other.private-message .bubble-content {
-	color: var(--bubble-private-text) !important;
-	background-color: transparent !important;
+.chat-area .bubble.other.private-message .bubble-content {
+	color: var(--bubble-private-text);
+	background-color: transparent;
 }
 
-.bubble.me.private-message {
-	background-color: var(--bubble-private) !important;
-	color: var(--bubble-private-text) !important;
+.chat-area .bubble.me.private-message {
+	background-color: var(--bubble-private);
+	color: var(--bubble-private-text);
 }
 
-.bubble.me.private-message .bubble-meta {
-	color: var(--accent-200) !important;
+.chat-area .bubble.me.private-message .bubble-meta {
+	color: var(--accent-200);
 }
 
-.bubble.me.private-message .bubble-content {
-	color: var(--bubble-private-text) !important;
-	background-color: transparent !important;
+.chat-area .bubble.me.private-message .bubble-content {
+	color: var(--bubble-private-text);
+	background-color: transparent;
 }
 
 /* === Theme Selector Mobile Styles / 主题选择器移动端样式 === */
@@ -347,7 +362,40 @@
 	animation: status-online 2s ease-in-out infinite;
 }
 
-/* Small screen additional adjustments */
+/* === Small Phone / 小屏手机 === */
+@media (max-width: 640px) {
+	.flip-card {
+		width: 96%;
+		height: 500px;
+	}
+
+	.chat-input-wrapper {
+		width: 100%;
+	}
+
+	.bubble {
+		max-width: 88%;
+		font-size: 14px;
+	}
+
+	.main-header {
+		padding: var(--space-2) var(--space-3);
+	}
+
+	.main-header .group-title {
+		font-size: 14px;
+	}
+
+	.chat-area {
+		padding: var(--space-3) var(--space-2) 88px var(--space-2);
+	}
+
+	.member {
+		padding: var(--space-2) var(--space-3);
+	}
+}
+
+/* === Extra Small Phone / 超小屏手机 === */
 @media (max-width: 480px) {
 	.flip-card {
 		width: 98%;
@@ -367,8 +415,8 @@
 		width: 100%;
 	}
 
-	.sidebar,
-	.rightbar {
-		width: 85vw !important;
+	.container .sidebar,
+	.container .rightbar {
+		width: 85vw;
 	}
 }
