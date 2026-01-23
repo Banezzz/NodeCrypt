@@ -59,6 +59,12 @@ import {
 	initScreenshotProtection  // 初始化截图保护 / Initialize screenshot protection
 } from './util.security.js';
 
+// 从 util.welcome.js 中导入欢迎向导功能函数
+// Import welcome wizard functions from util.welcome.js
+import {
+	initWelcome  // 初始化欢迎向导 / Initialize welcome wizard
+} from './util.welcome.js';
+
 // 从 util.dom.js 中导入常用 DOM 操作函数
 // Import common DOM manipulation functions from util.dom.js
 import {
@@ -97,7 +103,8 @@ import {	renderUserList,       // 渲染用户列表 / Render user list
 	setupTabs,            // 设置页面标签切换 / Setup tab switching
 	autofillRoomPwd,      // 自动填充房间密码 / Autofill room password
 	initLoginForm,        // 初始化登录表单 / Initialize login form
-	initFlipCard          // 初始化翻转卡片功能 / Initialize flip card functionality
+	initFlipCard,         // 初始化翻转卡片功能 / Initialize flip card functionality
+	setupSecurityInfoButton // 设置安全信息按钮 / Setup security info button
 } from './ui.js';
 
 // 设置全局配置参数
@@ -126,12 +133,16 @@ window.downloadFile = downloadFile;
 // 当 DOM 内容加载完成后执行初始化逻辑
 // Run initialization logic when the DOM content is fully loaded
 window.addEventListener('DOMContentLoaded', () => {
+	// 初始化欢迎向导（首次访问时显示）
+	// Initialize welcome wizard (shown on first visit)
+	initWelcome();
+
 	// 移除预加载样式类，允许过渡效果
 	// Remove preload class to allow transitions
 	setTimeout(() => {
 		document.body.classList.remove('preload');
 	}, 300);
-	
+
 	// 初始化登录表单 / Initialize login form
 	initLoginForm();
 
@@ -159,6 +170,7 @@ window.addEventListener('DOMContentLoaded', () => {
 	// Initialize autofill, input placeholders, and menus
 	autofillRoomPwd();	setupInputPlaceholder();
 	setupMoreBtnMenu();
+	setupSecurityInfoButton(); // 设置安全信息按钮 / Setup security info button
 	setupImagePreview();	setupEmojiPicker();
 	// 由于我们已经在DOM加载前预先初始化了语言设置，这里不需要重复初始化
 	// initSettings();

@@ -602,15 +602,15 @@ export function initFlipCard() {
 	const flipCard = document.getElementById('flip-card');
 	const helpBtn = document.getElementById('help-btn');
 	const backBtn = document.getElementById('back-btn');
-	
+
 	if (!flipCard || !helpBtn || !backBtn) return;
-	
+
 	const flipCardInner = flipCard.querySelector('.flip-card-inner');
 	if (!flipCardInner) return;
-	
+
 	// 翻转状态
 	let isFlipped = false;
-	
+
 	// 简单的翻转函数
 	function toggleFlip() {
 		isFlipped = !isFlipped;
@@ -620,18 +620,83 @@ export function initFlipCard() {
 			flipCardInner.classList.remove('flipped');
 		}
 	}
-	
+
 	// 帮助按钮点击事件
 	helpBtn.addEventListener('click', (e) => {
 		e.preventDefault();
 		e.stopPropagation();
 		toggleFlip();
 	});
-	
+
 	// 返回按钮点击事件
 	backBtn.addEventListener('click', (e) => {
 		e.preventDefault();
 		e.stopPropagation();
 		toggleFlip();
 	});
+}
+
+// 显示安全信息模态框
+// Show security info modal
+export function showSecurityInfoModal() {
+	// Remove existing modal if present
+	document.querySelector('.security-info-modal')?.remove();
+
+	const modal = document.createElement('div');
+	modal.className = 'security-info-modal';
+	modal.setAttribute('role', 'dialog');
+	modal.setAttribute('aria-modal', 'true');
+	modal.setAttribute('aria-labelledby', 'security-modal-title');
+
+	modal.innerHTML = `
+		<div class="security-info-bg"></div>
+		<div class="security-info-card">
+			<button class="security-info-close" aria-label="Close">&times;</button>
+			<h3 id="security-modal-title">🛡️ ${t('security.framework_title', 'Security Architecture')}</h3>
+			<p>${t('security.framework_intro', 'NodeCrypt uses a 3-layer encryption system where the server acts purely as an encrypted data relay:')}</p>
+			<div class="security-highlights">
+				<div class="security-highlight">
+					<span>🔒 ${t('security.zero_knowledge', 'Zero Knowledge')}</span>
+					<small>${t('security.zero_knowledge_desc', 'Server never sees plaintext messages')}</small>
+				</div>
+				<div class="security-highlight">
+					<span>💾 ${t('security.no_storage', 'No Storage')}</span>
+					<small>${t('security.no_storage_desc', 'Messages exist only in memory, rooms disappear when empty')}</small>
+				</div>
+				<div class="security-highlight">
+					<span>🔐 ${t('security.forward_secrecy', 'Forward Secrecy')}</span>
+					<small>${t('security.forward_secrecy_desc', 'No message history - offline users cannot retrieve past messages')}</small>
+				</div>
+			</div>
+		</div>
+	`;
+
+	// ESC listener (define before closeModal)
+	const handleEsc = (e) => {
+		if (e.key === 'Escape') closeModal();
+	};
+	document.addEventListener('keydown', handleEsc);
+
+	// Close function (unified cleanup for ESC listener)
+	const closeModal = () => {
+		document.removeEventListener('keydown', handleEsc);
+		modal.classList.add('closing');
+		setTimeout(() => modal.remove(), 300);
+	};
+
+	// Event bindings
+	modal.querySelector('.security-info-bg').addEventListener('click', closeModal);
+	modal.querySelector('.security-info-close').addEventListener('click', closeModal);
+
+	document.body.appendChild(modal);
+	requestAnimationFrame(() => modal.classList.add('show'));
+
+	// Focus management
+	modal.querySelector('.security-info-close').focus();
+}
+
+// 设置侧边栏安全按钮点击事件
+// Setup sidebar security info button click handler
+export function setupSecurityInfoButton() {
+	document.getElementById('sidebar-security-btn')?.addEventListener('click', showSecurityInfoModal);
 }

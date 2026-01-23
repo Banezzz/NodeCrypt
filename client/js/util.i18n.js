@@ -130,6 +130,35 @@ const LANGUAGES = {
 			'help.tip_security_reminder_desc': 'Both node name and password must be exactly the same to enter the same room',
 			'help.tip_password_strategy': 'Password Strategy',
 			'help.tip_password_strategy_desc': 'Recommend using strong passwords containing letters, numbers and symbols',
+
+			// Welcome wizard
+			'welcome.title': 'Welcome to NodeCrypt',
+			'welcome.subtitle': 'Zero-Knowledge Encrypted Chat',
+			'welcome.language': 'Language',
+			'welcome.appearance': 'Appearance',
+			'welcome.light': 'Light',
+			'welcome.dark': 'Dark',
+			'welcome.system': 'System',
+			'welcome.continue': 'Continue',
+
+			// Sidebar security entry
+			'ui.security_info': 'Security',
+
+			// Security framework
+			'security.framework_title': 'Security Architecture',
+			'security.framework_intro': 'NodeCrypt uses a 3-layer encryption system where the server acts purely as an encrypted data relay:',
+			'security.layer1': 'RSA-2048',
+			'security.layer1_desc': 'Server identity verification',
+			'security.layer2': 'ECDH-P384 / Curve25519',
+			'security.layer2_desc': 'Secure key exchange between clients',
+			'security.layer3': 'AES-256-CBC + ChaCha20',
+			'security.layer3_desc': 'Message encryption (server/client)',
+			'security.zero_knowledge': 'Zero Knowledge',
+			'security.zero_knowledge_desc': 'Server never sees plaintext messages',
+			'security.no_storage': 'No Storage',
+			'security.no_storage_desc': 'Messages exist only in memory, rooms disappear when empty',
+			'security.forward_secrecy': 'Forward Secrecy',
+			'security.forward_secrecy_desc': 'No message history - offline users cannot retrieve past messages',
 		}
 	},
 	zh: {
@@ -260,6 +289,35 @@ const LANGUAGES = {
 			'help.tip_security_reminder_desc': '节点名和密码都需要完全一致才能进入同一个房间',
 			'help.tip_password_strategy': '密码策略',
 			'help.tip_password_strategy_desc': '建议使用包含字母、数字和符号的强密码',
+
+			// Welcome wizard
+			'welcome.title': '欢迎使用 NodeCrypt',
+			'welcome.subtitle': '零知识端到端加密聊天',
+			'welcome.language': '语言',
+			'welcome.appearance': '外观',
+			'welcome.light': '浅色',
+			'welcome.dark': '深色',
+			'welcome.system': '跟随系统',
+			'welcome.continue': '继续',
+
+			// Sidebar security entry
+			'ui.security_info': '安全说明',
+
+			// Security framework
+			'security.framework_title': '安全架构',
+			'security.framework_intro': 'NodeCrypt 采用三层加密体系，服务器仅作为加密数据中继：',
+			'security.layer1': 'RSA-2048',
+			'security.layer1_desc': '服务器身份验证',
+			'security.layer2': 'ECDH-P384 / Curve25519',
+			'security.layer2_desc': '客户端之间安全密钥交换',
+			'security.layer3': 'AES-256-CBC + ChaCha20',
+			'security.layer3_desc': '消息加密（服务端/客户端）',
+			'security.zero_knowledge': '零知识',
+			'security.zero_knowledge_desc': '服务器永远无法读取明文消息',
+			'security.no_storage': '无存储',
+			'security.no_storage_desc': '消息仅存于内存，房间空置即消失',
+			'security.forward_secrecy': '前向保密',
+			'security.forward_secrecy_desc': '无消息历史 - 离线用户无法获取过去的消息',
 		}
 	}
 };
