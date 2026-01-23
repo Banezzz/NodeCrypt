@@ -53,6 +53,12 @@ import {
 	initColorMode        // 初始化颜色模式 / Initialize color mode
 } from './util.colorMode.js';
 
+// 从 util.security.js 中导入安全功能函数
+// Import security functions from util.security.js
+import {
+	initScreenshotProtection  // 初始化截图保护 / Initialize screenshot protection
+} from './util.security.js';
+
 // 从 util.dom.js 中导入常用 DOM 操作函数
 // Import common DOM manipulation functions from util.dom.js
 import {
