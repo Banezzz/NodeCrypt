@@ -831,6 +831,64 @@ body {
 	font-family: var(--font-mono);
 }
 
+/* === Message Copy Button / 消息复制按钮 === */
+.bubble-copy-btn {
+	position: absolute;
+	top: 6px;
+	right: 6px;
+	width: 24px;
+	height: 24px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: transparent;
+	border: none;
+	border-radius: 6px;
+	cursor: pointer;
+	opacity: 0;
+	transition: opacity 0.15s ease, background 0.12s ease, color 0.12s ease;
+	color: var(--text-muted);
+	padding: 0;
+	z-index: 5;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+.bubble:hover .bubble-copy-btn {
+	opacity: 1;
+}
+
+.bubble-copy-btn:hover {
+	background: var(--bg-secondary, rgba(0, 0, 0, 0.08));
+	color: var(--text-primary);
+}
+
+.bubble.me .bubble-copy-btn:hover {
+	background: rgba(255, 255, 255, 0.2);
+	color: rgba(255, 255, 255, 0.9);
+}
+
+.bubble-copy-btn.copied {
+	color: #22c55e;
+	opacity: 1;
+}
+
+.bubble.me .bubble-copy-btn {
+	color: rgba(255, 255, 255, 0.55);
+}
+
+.bubble.me .bubble-copy-btn.copied {
+	color: rgba(180, 255, 180, 0.95);
+}
+
+/* On touch/mobile devices: always show copy button slightly visible */
+/* 移动端：复制按钮始终轻微可见 */
+@media (hover: none) {
+	.bubble-copy-btn {
+		opacity: 0.35;
+	}
+}
+
 /* === Chat Input Area / 聊天输入区 === */
 :root {
 	--chat-input-border-radius: 14px;

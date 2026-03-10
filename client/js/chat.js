@@ -28,6 +28,13 @@ import {
 	t
 } from './util.i18n.js';
 
+// Copy icon SVG for message bubbles
+// 消息气泡复制按钮图标
+const COPY_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="2" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>`;
+// Checkmark icon for copied feedback
+// 复制成功反馈图标
+const CHECK_ICON_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+
 // Render the chat area
 // 渲染聊天区域
 export function renderChatArea() {
@@ -111,9 +118,10 @@ export function addMsg(text, isHistory = false, msgType = 'text', timestamp = nu
 	} else {
 		contentHtml = textToHTML(text)
 	}
+	const copyBtnLabel = t('action.copy_message', 'Copy');
 	const div = createElement('div', {
 		class: className
-	}, `<span class="bubble-content">${contentHtml}</span><span class="bubble-meta">${time}</span>`);
+	}, `<span class="bubble-content">${contentHtml}</span><span class="bubble-meta">${time}</span><button class="bubble-copy-btn" title="${copyBtnLabel}" aria-label="${copyBtnLabel}">${COPY_ICON_SVG}</button>`);
 	chatArea.appendChild(div);
 	chatArea.scrollTop = chatArea.scrollHeight
 }
@@ -194,7 +202,8 @@ export function addOtherMsg(msg, userName = '', _avatar = '', isHistory = false,
 	if (msgType === 'file' || msgType === 'file_private') {
 		bubbleClasses += ' file-bubble';
 	}
-	bubbleWrap.innerHTML = `<span class="avatar"></span><div class="bubble-other-main"><div class="${bubbleClasses}"><div class="bubble-other-name">${safeUserName}</div><span class="bubble-content">${contentHtml}</span><span class="bubble-meta">${time}</span></div></div>`;
+	const copyBtnLabel = t('action.copy_message', 'Copy');
+	bubbleWrap.innerHTML = `<span class="avatar"></span><div class="bubble-other-main"><div class="${bubbleClasses}"><div class="bubble-other-name">${safeUserName}</div><span class="bubble-content">${contentHtml}</span><span class="bubble-meta">${time}</span><button class="bubble-copy-btn" title="${copyBtnLabel}" aria-label="${copyBtnLabel}">${COPY_ICON_SVG}</button></div></div>`;
 	const svg = createAvatarSVG(userName);
 	const avatarEl = $('.avatar', bubbleWrap);
 	if (avatarEl) {
@@ -244,6 +253,70 @@ export function updateChatInputStyle() {
 	}
 	const html = inputMessageInput.innerHTML.replace(/<br\s*\/?>(\s*)?/gi, '').replace(/&nbsp;/g, '').replace(/\u200B/g, '').trim();
 	placeholder.style.opacity = (html === '') ? '1' : '0'
+}
+
+// Copy the text content of a bubble to clipboard
+// 复制气泡文字内容到剪贴板
+function copyBubbleText(bubble, btn) {
+	if (!bubble) return;
+	const contentEl = bubble.querySelector('.bubble-content');
+	if (!contentEl) return;
+	const text = (contentEl.innerText || contentEl.textContent || '').trim();
+	if (!text) return;
+	const showFeedback = () => {
+		const target = btn || bubble.querySelector('.bubble-copy-btn');
+		if (!target) return;
+		target.innerHTML = CHECK_ICON_SVG;
+		target.classList.add('copied');
+		setTimeout(() => {
+			target.innerHTML = COPY_ICON_SVG;
+			target.classList.remove('copied');
+		}, 1500);
+	};
+	if (navigator.clipboard && navigator.clipboard.writeText) {
+		navigator.clipboard.writeText(text).then(showFeedback).catch(() => {
+			fallbackCopy(text);
+			showFeedback();
+		});
+	} else {
+		fallbackCopy(text);
+		showFeedback();
+	}
+}
+
+// Fallback clipboard copy for environments without Clipboard API
+// 不支持 Clipboard API 时的降级复制
+function fallbackCopy(text) {
+	const ta = document.createElement('textarea');
+	ta.value = text;
+	ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
+	document.body.appendChild(ta);
+	ta.select();
+	try { document.execCommand('copy'); } catch (_) { /* ignore */ }
+	ta.remove();
+}
+
+// Setup message copy functionality (button click + double-click shortcut)
+// 设置消息复制功能（按钮点击 + 双击快捷键）
+export function setupMessageCopy() {
+	const chatArea = $id('chat-area');
+	if (!chatArea) return;
+	// Click on copy button
+	// 点击复制按钮
+	on(chatArea, 'click', function(e) {
+		const btn = e.target.closest('.bubble-copy-btn');
+		if (!btn) return;
+		e.stopPropagation();
+		copyBubbleText(btn.closest('.bubble'), btn);
+	});
+	// Double-click on bubble as keyboard-free shortcut
+	// 双击气泡作为快捷操作
+	on(chatArea, 'dblclick', function(e) {
+		if (e.target.tagName === 'IMG' || e.target.tagName === 'BUTTON' || e.target.tagName === 'A') return;
+		const bubble = e.target.closest('.bubble');
+		if (!bubble || bubble.classList.contains('system')) return;
+		copyBubbleText(bubble, null);
+	});
 }
 
 // Setup image preview functionality

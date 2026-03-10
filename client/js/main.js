@@ -89,6 +89,7 @@ import {
 	addOtherMsg,          // 添加其他用户消息 / Add message from other users
 	addSystemMsg,         // 添加系统消息 / Add a system message
 	setupImagePreview,    // 设置图片预览功能 / Setup image preview
+	setupMessageCopy,     // 设置消息复制功能 / Setup message copy
 	setupInputPlaceholder, // 设置输入框的占位提示 / Setup placeholder for input box
 	autoGrowInput         // 自动调整输入框高度 / Auto adjust input height
 } from './chat.js';
@@ -173,7 +174,9 @@ window.addEventListener('DOMContentLoaded', () => {
 	setupMoreBtnMenu();
 	setupSecurityInfoButton(); // 设置安全信息按钮 / Setup security info button
 	setupPreferencesButton();  // 设置偏好设置按钮 / Setup preferences button
-	setupImagePreview();	setupEmojiPicker();
+	setupImagePreview();
+	setupMessageCopy();
+	setupEmojiPicker();
 	// 由于我们已经在DOM加载前预先初始化了语言设置，这里不需要重复初始化
 	// initSettings();
 	// updateStaticTexts(); // 在初始化设置后更新静态文本 / Update static texts after initializing settings
