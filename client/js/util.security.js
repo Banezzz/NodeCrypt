@@ -19,10 +19,6 @@ export function initScreenshotProtection() {
 	if (isProtectionActive) return;
 	isProtectionActive = true;
 
-	// Disable right-click context menu on chat area
-	// 禁用聊天区域的右键菜单
-	document.addEventListener('contextmenu', handleContextMenu);
-
 	// Disable common screenshot keyboard shortcuts
 	// 禁用常见的截图键盘快捷键
 	document.addEventListener('keydown', handleKeyboardShortcuts);
@@ -41,24 +37,6 @@ export function initScreenshotProtection() {
 	window.addEventListener('afterprint', handleAfterPrint);
 
 	console.log('[Security] Screenshot protection initialized');
-}
-
-/**
- * Handle context menu (right-click)
- * 处理右键菜单
- */
-function handleContextMenu(e) {
-	const target = e.target;
-
-	// Block right-click on private messages and sensitive areas
-	// 阻止在私聊消息和敏感区域上的右键点击
-	if (target.closest('.bubble.private-message') ||
-		target.closest('.chat-area') ||
-		target.closest('.members')) {
-		e.preventDefault();
-		showSecurityNotice('contextmenu');
-		return false;
-	}
 }
 
 /**
@@ -243,7 +221,6 @@ function showSecurityNotice(type) {
 	}
 
 	const messages = {
-		contextmenu: 'Right-click disabled for privacy',
 		screenshot: 'Screenshot protection active',
 		print: 'Print function disabled'
 	};
@@ -284,7 +261,6 @@ export function protectElement(element) {
  * 禁用截图保护
  */
 export function disableScreenshotProtection() {
-	document.removeEventListener('contextmenu', handleContextMenu);
 	document.removeEventListener('keydown', handleKeyboardShortcuts);
 	document.removeEventListener('visibilitychange', handleVisibilityChange);
 	document.removeEventListener('dragstart', handleDragStart);
